@@ -1,0 +1,5 @@
+To compile and run the game, simply type
+
+$ make run
+
+within this directory.
