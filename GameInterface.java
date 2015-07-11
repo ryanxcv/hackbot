@@ -73,11 +73,6 @@ public class GameInterface {
     public void getSelectedAttack() {
     }
 
-    /** Temporary accessor **/
-    public Grid getGrid() {
-        return grid;
-    }
-
     /** Returns the grid tiles. **/
     public Tile[][] getGridTiles() {
         return grid.tiles;
