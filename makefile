@@ -2,10 +2,11 @@ JFLAGS = -g -d .
 JC  = javac
 JVM = java
 
-PACKAGE = hackbotui
+MAINPACKAGE = hackbotui
+PACKAGES = hackbotcore hackbotui hackbotutil
 CLASSES = *.java
 
-MAIN = $(PACKAGE).TestGame
+MAIN = $(MAINPACKAGE).TestGame
 
 default:
 	$(JC) $(JFLAGS) $(CLASSES)
@@ -14,4 +15,5 @@ run: default
 	$(JVM) $(MAIN)
 
 clean:
-	$(RM) $(PACKAGE) *.class
+	$(RM) -r $(PACKAGES)
+	$(RM) *.class
