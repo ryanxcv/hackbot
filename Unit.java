@@ -28,7 +28,7 @@ public abstract class Unit {
     }
 
     protected void setDone() { done = true; }
-    protected boolean isDone() { return done; }
+    public boolean isDone() { return done; }
 
     /**
      * This method is run at the beginning of each turn.

@@ -86,6 +86,8 @@ class FieldDisplay extends JComponent {
         drawTile(g, selected.getHead(), imgSelect);
 
         // Draw the movement overlays.
+        if (selected.isDone())
+            return;
         Coordinate selectionHead = selected.getHead();
         int column = selectionHead.getColumn();
         int row    = selectionHead.getRow();
