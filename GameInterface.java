@@ -27,8 +27,7 @@ public class GameInterface {
 
      /** Selects a given unit. **/
     public boolean selectUnit(Coordinate coord) {
-        Unit unit = battle.unitFromTile(coord);
-        battle.selected = unit;
+        battle.selected = battle.unitFromTile(coord);
         return battle.selected == null;
     }
 
@@ -78,12 +77,17 @@ public class GameInterface {
 
     /** Returns the list of units currently on the board. **/
     public LinkedList<Unit> getUnitList() {
-        return battle.units;
+        LinkedList<Unit> result = new LinkedList<Unit>();
+        for (Unit u : battle.units)
+            result.add(u.copy());
+        return result;
     }
 
     /** Returns the selected unit. **/
     public Unit getSelectedUnit() {
-        return battle.selected;
+        if (battle.selected == null)
+            return null;
+        return battle.selected.copy();
     }
 
     /** Returns the selected attack. **/
