@@ -22,6 +22,7 @@ class FieldDisplay extends JComponent {
     /** Images **/
     private BufferedImage bgImage;
     private BufferedImage imgTile;
+    private BufferedImage imgDone;
     private BufferedImage imgSelect;
     private BufferedImage imgUp;
     private BufferedImage imgDown;
@@ -46,6 +47,7 @@ class FieldDisplay extends JComponent {
         // Load images.
         bgImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         imgTile   = UI.getImage(     "tile.png");
+        imgDone   = UI.getImage(     "done.png");
         imgSelect = UI.getImage("selection.png");
         imgUp     = UI.getImage(       "up.png");
         imgDown   = UI.getImage(     "down.png");
@@ -74,6 +76,8 @@ class FieldDisplay extends JComponent {
         // Draw the units. (To do: fix)
         for (Unit unit : iface.getUnitList()) {
             drawTile(g, unit.getHead(), imgHead);
+            if (unit.isDone())
+                drawTile(g, unit.getHead(), imgDone);
             for (int i = 1; i < unit.sectors.size(); i++)
                 drawTile(g, unit.sectors.get(i), imgBody);
         }
@@ -86,7 +90,7 @@ class FieldDisplay extends JComponent {
         drawTile(g, selected.getHead(), imgSelect);
 
         // Draw the movement overlays.
-        if (selected.isDone())
+        if (selected.isDone() || selected.getMoves() == 0)
             return;
         Coordinate selectionHead = selected.getHead();
         int column = selectionHead.getColumn();

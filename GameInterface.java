@@ -27,7 +27,10 @@ public class GameInterface {
 
      /** Selects a given unit. **/
     public boolean selectUnit(Coordinate coord) {
+        Unit lastSelection = battle.selected;
         battle.selected = battle.unitFromTile(coord);
+        if (lastSelection != battle.selected && lastSelection != null)
+            lastSelection.deselect();
         return battle.selected == null;
     }
 

@@ -30,12 +30,19 @@ public abstract class Unit {
     protected void setDone() { done = true; }
     public boolean isDone() { return done; }
 
+    public int getMoves() { return moves; }
+
     /**
      * This method is run at the beginning of each turn.
      */
     protected void reset() {
         moves = speed;
         done = false;
+    }
+
+    protected void deselect() {
+        if (moves != speed)
+            setDone();
     }
 
     /**
@@ -48,10 +55,6 @@ public abstract class Unit {
         assert moves > 0 : moves;
         assert !done;
         moves--;
-
-        // If now out of moves, set done to true.
-        if (moves == 0)
-            setDone();
 
         // Insert the tile as the new head.
         sectors.add(0, coord);
