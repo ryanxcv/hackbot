@@ -23,14 +23,23 @@ public class GameInterface {
      * regarding the gamestate.
      */
 
-     /** Selects the unit at a given tile. **/
+     /** Selects a given unit. **/
     public boolean selectUnit(Unit unit) {
-        return false;
+        grid.selected = unit;
+        return grid.selected == null;
     }
 
     /** Moves the selected unit to a given tile. **/
     public boolean moveToTile(Tile tile) {
-        return false;
+        if (!tile.isFilled())
+            return false;
+        Unit unitAtTile = grid.unitFromTile(tile);
+        if (unitAtTile != null)
+            return false;
+
+        // Movement is successful. Make the move and return true.
+        grid.selected.move(tile);
+        return true;
     }
 
     /** Select an attack from among a unit's attacks. **/
@@ -61,7 +70,7 @@ public class GameInterface {
 
     /** Returns the list of units currently on the board. **/
     public LinkedList<Unit> getUnitList() {
-        return null;
+        return grid.units;
     }
 
     /** Returns the selected unit. **/
