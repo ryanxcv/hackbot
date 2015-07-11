@@ -1,4 +1,4 @@
-package spybot;
+package hackbotcore;
 
 import java.util.LinkedList;
 

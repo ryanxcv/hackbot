@@ -1,4 +1,4 @@
-package spybot;
+package hackbotui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -24,7 +24,7 @@ public class SidePanel extends JPanel {
         GameFrame info = new GameFrame("cat program.info");
         info.setVisible(true);
         add(info);
-        
+
         JButton undoButton = new JButton("Undo");
         add(undoButton, BorderLayout.WEST);
     }

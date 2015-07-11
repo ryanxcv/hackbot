@@ -1,4 +1,4 @@
-package spybot;
+package hackbotcore;
 
 /**
  * This class represents a single tile on the game board, which may or may not

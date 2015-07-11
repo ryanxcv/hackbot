@@ -1,4 +1,4 @@
-package spybot;
+package hackbotcore;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

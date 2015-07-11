@@ -1,4 +1,4 @@
-package spybot;
+package hackbotui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

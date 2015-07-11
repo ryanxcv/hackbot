@@ -1,4 +1,4 @@
-package spybot;
+package hackbotui;
 
 import javax.swing.JComponent;
 import java.awt.*;
