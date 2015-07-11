@@ -2,7 +2,7 @@ JFLAGS = -g -d .
 JC  = javac
 JVM = java
 
-PACKAGE = spybot
+PACKAGE = hackbotui
 CLASSES = *.java
 
 MAIN = $(PACKAGE).TestGame
