@@ -2,6 +2,8 @@ package hackbotcore;
 
 import java.util.LinkedList;
 
+import hackbotutil.Coordinate;
+
 /**
  * Allows for safe engine-UI interaction by providing public helper methods.
  * The entire contents of the game engine are concealed, and only these
@@ -30,15 +32,16 @@ public class GameInterface {
     }
 
     /** Moves the selected unit to a given tile. **/
-    public boolean moveToTile(Tile tile) {
-        if (!tile.isFilled())
-            return false;
-        Unit unitAtTile = grid.unitFromTile(tile);
+    public boolean moveToTile(Coordinate coord) {
+        // Make sure the tile is filled (to do)
+
+
+        Unit unitAtTile = grid.unitFromTile(coord);
         if (unitAtTile != null)
             return false;
 
         // Movement is successful. Make the move and return true.
-        grid.selected.move(tile);
+        grid.selected.move(coord);
         return true;
     }
 
@@ -82,8 +85,11 @@ public class GameInterface {
     public void getSelectedAttack() {
     }
 
-    /** Returns the grid tiles. **/
-    public Tile[][] getGridTiles() {
-        return grid.tiles;
+    public int getWidth() {
+        return grid.getWidth();
+    }
+
+    public int getHeight() {
+        return grid.getHeight();
     }
 }

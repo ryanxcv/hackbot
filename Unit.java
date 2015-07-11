@@ -1,6 +1,7 @@
 package hackbotcore;
 
 import java.util.LinkedList;
+import hackbotutil.Coordinate;
 
 /**
  * All of the battling programs inherit from this general class, called Unit.
@@ -8,7 +9,7 @@ import java.util.LinkedList;
  */
 public abstract class Unit {
 
-    public LinkedList<Tile> sectors;
+    public LinkedList<Coordinate> sectors;
     protected int moves;
     private boolean done;
 
@@ -19,9 +20,9 @@ public abstract class Unit {
     protected int team;
 
     // Set up universal initial properties.
-    protected void init(Tile tile) {
-        sectors = new LinkedList<Tile>();
-        sectors.add(tile);
+    protected void init(Coordinate coord) {
+        sectors = new LinkedList<Coordinate>();
+        sectors.add(coord);
     }
 
     protected void setDone() { done = true; }
@@ -39,12 +40,12 @@ public abstract class Unit {
      * occupable). This tile becomes the new head, and the unit is shrunk
      * if already at max size.
      */
-    protected void move(Tile tile) {
+    protected void move(Coordinate coord) {
         // Insert the tile as the new head.
-        sectors.add(0, tile);
+        sectors.add(0, coord);
 
         // If the program moved over itself, remove any duplicate tiles.
-        Tile head = getHead();
+        Coordinate head = getHead();
         for (int i = 1; i < sectors.size(); i++) {
             if (head == sectors.get(i)) {
                 sectors.remove(i);
@@ -58,43 +59,41 @@ public abstract class Unit {
         }
     }
 
-    public Tile getHead() {
+    public Coordinate getHead() {
         return sectors.getFirst();
     }
 
     public int distance(int column, int row) {
-        Tile head = getHead();
-        return Math.abs(head.getColumn() - column) +
-               Math.abs(head.getRow() - row);
+        Coordinate head = getHead();
+        return head.distance(column, row);
     }
 
-    protected int distance(Tile tile) {
-        Tile head = getHead();
-        return Math.abs(head.getColumn() - tile.getColumn()) +
-               Math.abs(head.getRow() - tile.getRow());
+    public int distance(Coordinate coord) {
+        Coordinate head = getHead();
+        return head.distance(coord);
     }
 
     public static class Hack extends Unit {
 
-        public Hack(Tile tile) {
+        public Hack(Coordinate coord) {
             name = "Hack";
             speed = 2;
             maxSize = 4;
             team = 0;
 
-            init(tile);
+            init(coord);
         }
     }
 
     public static class Sentinel extends Unit {
 
-        public Sentinel(Tile tile) {
+        public Sentinel(Coordinate coord) {
             name = "Sentinel";
             speed = 1;
             maxSize = 4;
             team = 1;
 
-            init(tile);
+            init(coord);
         }
     }
 }
