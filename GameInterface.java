@@ -4,9 +4,8 @@ import java.util.LinkedList;
 
 /**
  * Allows for safe engine-UI interaction by providing public helper methods.
- * The end goal of this interface is that the entire contents of the game engine
- * are concealed in a separate package, and only these functions can be run from
- * outside.
+ * The entire contents of the game engine are concealed, and only these
+ * functions can be run from outside.
  */
 public class GameInterface {
 
