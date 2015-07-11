@@ -37,7 +37,7 @@ public class GameInterface {
     /** Moves the selected unit to a given tile. **/
     public boolean moveToTile(Coordinate coord) {
         // Check if the unit's done
-        if (battle.selected.isDone())
+        if (battle.selected.isDone() || battle.selected.moves < 1)
             return false;
 
         // Check if the destination is valid
@@ -61,7 +61,9 @@ public class GameInterface {
 
     /** Undo any movement made by the selected unit this turn. **/
     public boolean undo() {
-        return false;
+        if (battle.selected == null)
+            return false;
+        return battle.selected.undo();
     }
 
     public boolean setDone() {

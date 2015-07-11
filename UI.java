@@ -33,7 +33,7 @@ public class UI extends JFrame {
         frame.add(field, BorderLayout.CENTER);
 
         // Set up the side panel.
-        SidePanel side = new SidePanel();
+        SidePanel side = new SidePanel(iface, field);
         frame.add(side, BorderLayout.WEST);
 
         // Finalize the main window.

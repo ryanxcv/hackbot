@@ -10,6 +10,7 @@ import hackbotutil.Coordinate;
 public abstract class Unit {
 
     public LinkedList<Coordinate> sectors;
+    public LinkedList<Coordinate> savedSectors;
     protected int moves;
     private boolean done;
 
@@ -21,10 +22,9 @@ public abstract class Unit {
 
     // Set up universal initial properties.
     protected void init(Coordinate coord) {
-        moves = speed;
-        done = false;
         sectors = new LinkedList<Coordinate>();
         sectors.add(coord);
+        reset();
     }
 
     protected void setDone() { done = true; }
@@ -36,6 +36,7 @@ public abstract class Unit {
      * This method is run at the beginning of each turn.
      */
     protected void reset() {
+        savedSectors = sectorsCopy();
         moves = speed;
         done = false;
     }
@@ -46,14 +47,24 @@ public abstract class Unit {
     }
 
     /**
+     * Resets any movement during the unit's move, but cannot undo once it is
+     * done. Returns true on success.
+     */
+    protected boolean undo() {
+        if (done)
+            return false;
+        sectors = savedSectors;
+        reset();
+        return true;
+    }
+
+    /**
      * Move the unit into a given tile (which should be adjacent and
      * occupable). This tile becomes the new head, and the unit is shrunk
      * if already at max size.
      */
     protected void move(Coordinate coord) {
         // Reduce moves.
-        assert moves > 0 : moves;
-        assert !done;
         moves--;
 
         // Insert the tile as the new head.
