@@ -6,21 +6,19 @@ import java.util.Map;
 import hackbotutil.Coordinate;
 
 /**
-}
- * The grid is the playing field, composed of a 2D array of tiles
- * (in [column][row] format) that house the landscape and units.
- *
- * The main function of this class is to house a 2D array of tiles, but it
- * also provides some useful helper functions.
+ * This class is the core of the battle engine. It keeps track of the gameboard
+ * and pieces as well as the gamestate, and provides helper functions. Just as
+ * the GameInterface connects the UI to the engine, this class connects the
+ * GameInterface to the low-level piece positions and states.
  */
-public class Grid {
+public class Battle {
 
     private int columns;
     private int rows;
     protected LinkedList<Unit> units;
     protected Unit selected;
 
-    public Grid(int columns, int rows) {
+    public Battle(int columns, int rows) {
         units = new LinkedList<Unit>();
         selected = null;
         this.columns = columns;
