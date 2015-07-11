@@ -8,6 +8,10 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
+import java.applet.Applet;
+import java.applet.AudioClip;
+import java.net.URL;
+
 import hackbotcore.*;
 
 /**
@@ -51,6 +55,17 @@ public class UI extends JFrame {
         try {
             return ImageIO.read(new File("img/" + filename));
         } catch (IOException e) {
+            System.out.println("Warning: " + filename + " failed to load.");
+        }
+        return null;
+    }
+
+    public static AudioClip getSound(String filename) {
+        try {
+            File file = new File("sound/" + filename);
+            return Applet.newAudioClip(file.toURI().toURL());
+        } catch (Exception e) {
+            System.out.println(e);
             System.out.println("Warning: " + filename + " failed to load.");
         }
         return null;

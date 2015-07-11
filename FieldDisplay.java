@@ -9,6 +9,8 @@ import java.awt.Graphics;
 import java.util.Collection;
 import javax.swing.JComponent;
 
+import java.applet.AudioClip;
+
 import hackbotcore.*;
 import hackbotutil.Coordinate;
 
@@ -35,6 +37,10 @@ class FieldDisplay extends JComponent {
     private BufferedImage imgHead;
     private BufferedImage imgBody;
 
+    /** Audio **/
+    private AudioClip sndSelect;
+    private AudioClip sndMove;
+
     /** Class constructor. **/
     public FieldDisplay(GameInterface iface) {
         this.iface = iface;
@@ -60,6 +66,10 @@ class FieldDisplay extends JComponent {
         // Temporary unit images
         imgHead = UI.getImage("hack.png");
         imgBody = UI.getImage("hack_body.png");
+
+        // Load sounds.
+        sndSelect = UI.getSound("sound1.wav");
+        sndMove   = UI.getSound("sound2.wav");
 
         addMouseListener(new FieldMouseListener(iface));
     }
@@ -163,8 +173,10 @@ class FieldDisplay extends JComponent {
 
             // Program selection
             if (selected == null) {
-                if (iface.selectUnit(coords));
+                if (iface.selectUnit(coords)) {
+                    sndSelect.play();
                     repaint();
+                }
                 return;
             }
 
