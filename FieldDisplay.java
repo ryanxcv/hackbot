@@ -150,24 +150,26 @@ class FieldDisplay extends JComponent {
 
             // Program selection
             if (selected == null) {
-                iface.selectUnit(coords);
-                repaint();
+                if (iface.selectUnit(coords));
+                    repaint();
                 return;
             }
 
             // Movement
             if (selected.distance(coords) == 1) {
                 if (clickedUnit == null || selected.contains(coords)) {
-                    iface.moveToTile(coords);
-                    repaint();
+                    if (iface.moveToTile(coords))
+                        repaint();
+                    else
+                        System.out.println("Movement failed");
                 } else {
-                    iface.selectUnit(coords);
-                    repaint();
+                    if (iface.selectUnit(coords));
+                        repaint();
                 }
             // Deselection
             } else if (selected.distance(coords) > 1) {
-                iface.selectUnit(coords);
-                repaint();
+                if (iface.selectUnit(coords));
+                    repaint();
             }
         }
     }

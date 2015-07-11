@@ -25,13 +25,16 @@ public class GameInterface {
      * regarding the gamestate.
      */
 
-     /** Selects a given unit. **/
+     /** Selects a given unit. Returns true if the selection changed. **/
     public boolean selectUnit(Coordinate coord) {
         Unit lastSelection = battle.selected;
         battle.selected = battle.unitFromTile(coord);
-        if (lastSelection != battle.selected && lastSelection != null)
-            lastSelection.deselect();
-        return battle.selected == null;
+        if (lastSelection != battle.selected) {
+            if (lastSelection != null)
+                lastSelection.deselect();
+            return true;
+        }
+        return false;
     }
 
     /** Moves the selected unit to a given tile. **/
