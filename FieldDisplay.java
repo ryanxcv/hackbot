@@ -9,6 +9,8 @@ import java.awt.Image;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
+import hackbotcore.*;
+
 /** An class derived from JComponent that displays a custom image. **/
 class FieldDisplay extends JComponent {
 

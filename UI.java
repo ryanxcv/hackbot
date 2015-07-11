@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Container;
 import javax.swing.JFrame;
 
+import hackbotcore.*;
+
 /**
  * The window that contains all of the game's UI elements.
  */
