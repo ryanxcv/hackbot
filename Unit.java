@@ -62,14 +62,6 @@ public abstract class Unit {
         return sectors.getFirst();
     }
 
-    public String getImgHead() {
-        return imgHead;
-    }
-
-    public String getImgBody() {
-        return imgBody;
-    }
-
     public int distance(int column, int row) {
         Tile head = getHead();
         return Math.abs(head.getColumn() - column) +
