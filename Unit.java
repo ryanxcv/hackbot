@@ -21,6 +21,7 @@ public abstract class Unit {
 
     // Set up universal initial properties.
     protected void init(Coordinate coord) {
+        moves = speed;
         sectors = new LinkedList<Coordinate>();
         sectors.add(coord);
     }
@@ -54,23 +55,18 @@ public abstract class Unit {
         }
 
         // If the program is over max size, trim it down to comply.
-        if (sectors.size() > maxSize) {
+        if (sectors.size() > maxSize)
             sectors.removeLast();
-        }
     }
 
-    public Coordinate getHead() {
-        return sectors.getFirst();
-    }
+    public Coordinate getHead() { return sectors.getFirst(); }
 
     public int distance(int column, int row) {
-        Coordinate head = getHead();
-        return head.distance(column, row);
+        return getHead().distance(column, row);
     }
 
     public int distance(Coordinate coord) {
-        Coordinate head = getHead();
-        return head.distance(coord);
+        return getHead().distance(coord);
     }
 
     public static class Hack extends Unit {
