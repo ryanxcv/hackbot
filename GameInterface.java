@@ -11,10 +11,10 @@ import hackbotutil.Coordinate;
  */
 public class GameInterface {
 
-    private Grid grid;
+    private Battle battle;
 
-    public GameInterface(Grid grid) {
-        this.grid = grid;
+    public GameInterface(Battle battle) {
+        this.battle = battle;
     }
 
     /**
@@ -27,8 +27,8 @@ public class GameInterface {
 
      /** Selects a given unit. **/
     public boolean selectUnit(Unit unit) {
-        grid.selected = unit;
-        return grid.selected == null;
+        battle.selected = unit;
+        return battle.selected == null;
     }
 
     /** Moves the selected unit to a given tile. **/
@@ -36,12 +36,12 @@ public class GameInterface {
         // Make sure the tile is filled (to do)
 
 
-        Unit unitAtTile = grid.unitFromTile(coord);
+        Unit unitAtTile = battle.unitFromTile(coord);
         if (unitAtTile != null)
             return false;
 
         // Movement is successful. Make the move and return true.
-        grid.selected.move(coord);
+        battle.selected.move(coord);
         return true;
     }
 
@@ -73,12 +73,12 @@ public class GameInterface {
 
     /** Returns the list of units currently on the board. **/
     public LinkedList<Unit> getUnitList() {
-        return grid.units;
+        return battle.units;
     }
 
     /** Returns the selected unit. **/
     public Unit getSelectedUnit() {
-        return grid.selected;
+        return battle.selected;
     }
 
     /** Returns the selected attack. **/
@@ -86,10 +86,10 @@ public class GameInterface {
     }
 
     public int getWidth() {
-        return grid.getWidth();
+        return battle.getWidth();
     }
 
     public int getHeight() {
-        return grid.getHeight();
+        return battle.getHeight();
     }
 }

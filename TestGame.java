@@ -10,10 +10,10 @@ public class TestGame {
     public static void main(String[] args) {
 
         // Set up a test playing field.
-        Grid grid = new Grid(10, 10);
-        GameInterface iface = new GameInterface(grid);
-        grid.addUnit(new Hack(new Coordinate(1, 1)));
-        grid.addUnit(new Sentinel(new Coordinate(6, 4)));
+        Battle battle = new Battle(10, 10);
+        GameInterface iface = new GameInterface(battle);
+        battle.addUnit(new Hack(new Coordinate(1, 1)));
+        battle.addUnit(new Sentinel(new Coordinate(6, 4)));
 
         UI ui = new UI(iface);
     }
