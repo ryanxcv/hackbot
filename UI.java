@@ -2,7 +2,6 @@ package hackbotui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -27,8 +26,7 @@ public class UI extends JFrame {
         this.iface = iface;
         turn = Player.HUMAN;
         JFrame frame = new JFrame("Hackbot");
-        Container c = frame.getContentPane();
-        c.setBackground(Color.BLACK);
+        frame.getContentPane().setBackground(Color.BLACK);
 
         // Set up the field display.
         FieldDisplay field = new FieldDisplay(iface);

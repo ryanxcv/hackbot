@@ -6,7 +6,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.awt.Image;
-import java.awt.Dimension;
 import java.awt.Graphics;
 
 import hackbotcore.*;
@@ -33,7 +32,7 @@ class FieldDisplay extends JComponent {
     private BufferedImage imgHead;
     private BufferedImage imgBody;
 
-    /** Class constructor for given dimensions. **/
+    /** Class constructor. **/
     public FieldDisplay(GameInterface iface) {
         this.iface = iface;
 

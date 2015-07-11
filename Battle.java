@@ -1,7 +1,6 @@
 package hackbotcore;
 
 import java.util.LinkedList;
-import java.util.Map;
 
 import hackbotutil.Coordinate;
 
