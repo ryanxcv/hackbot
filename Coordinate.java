@@ -3,7 +3,7 @@ package hackbotutil;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class Coordinate {
+public class Coordinate implements Comparable<Coordinate> {
 
     private int column;
     private int row;
@@ -42,7 +42,7 @@ public class Coordinate {
     public Set<Coordinate> distanceSet(int max) {
         Set<Coordinate> result = new TreeSet<Coordinate>();
         for (int c = column - max; c <= column + max; c++)
-            for (int r = row - max; c <= row + max; r++)
+            for (int r = row - max; r <= row + max; r++)
                 if (distance(c, r) <= max)
                     result.add(new Coordinate(c, r));
         return result;
@@ -52,6 +52,12 @@ public class Coordinate {
         Set<Coordinate> result = distanceSet(max);
         result.removeAll(distanceSet(min));
         return result;
+    }
+
+    public int compareTo(Coordinate coord) {
+        if (row != coord.getRow())
+            return row - coord.getRow();
+        return column - coord.getColumn();
     }
 
     /** Returns a copy of this Coordinate. **/

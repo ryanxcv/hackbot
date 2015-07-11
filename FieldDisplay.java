@@ -1,12 +1,13 @@
 package hackbotui;
 
-import javax.swing.JComponent;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.awt.Image;
 import java.awt.Graphics;
+import java.util.Collection;
+import javax.swing.JComponent;
 
 import hackbotcore.*;
 import hackbotutil.Coordinate;
@@ -24,6 +25,7 @@ class FieldDisplay extends JComponent {
     private BufferedImage imgTile;
     private BufferedImage imgDone;
     private BufferedImage imgSelect;
+    private BufferedImage imgMove;
     private BufferedImage imgUp;
     private BufferedImage imgDown;
     private BufferedImage imgLeft;
@@ -49,6 +51,7 @@ class FieldDisplay extends JComponent {
         imgTile   = UI.getImage(     "tile.png");
         imgDone   = UI.getImage(     "done.png");
         imgSelect = UI.getImage("selection.png");
+        imgMove   = UI.getImage(     "move.png");
         imgUp     = UI.getImage(       "up.png");
         imgDown   = UI.getImage(     "down.png");
         imgLeft   = UI.getImage(     "left.png");
@@ -103,6 +106,12 @@ class FieldDisplay extends JComponent {
             drawTile(g, new Coordinate(column - 1, row), imgLeft);
         if (column < iface.getWidth() - 1)
             drawTile(g, new Coordinate(column + 1, row), imgRight);
+
+        if (selected.getMoves() == 1)
+            return;
+        System.out.println(selected.getMoves());
+        drawTiles(g, selectionHead.distanceSet(selected.getMoves(), 1), imgMove);
+
     }
 
     /** Draw an image at a tile. **/
@@ -111,6 +120,10 @@ class FieldDisplay extends JComponent {
         int row    = coord.getRow();
         g.drawImage(img, TILE_PIX_SIZE * column,
                          TILE_PIX_SIZE * row, null);
+    }
+    public void drawTiles(Graphics g, Collection<Coordinate> coords, Image img) {
+        for (Coordinate coord : coords)
+            drawTile(g, coord, img);
     }
 
     /** Get the tile coordinates of a click, given its x and y position. **/
