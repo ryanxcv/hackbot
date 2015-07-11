@@ -28,6 +28,10 @@ class FieldDisplay extends JComponent {
     private BufferedImage imgLeft;
     private BufferedImage imgRight;
 
+    // Temporary unit images
+    private BufferedImage imgHead;
+    private BufferedImage imgBody;
+
     /** Class constructor for given dimensions. **/
     public FieldDisplay(GameInterface iface) {
         this.iface = iface;
@@ -49,6 +53,10 @@ class FieldDisplay extends JComponent {
         imgLeft   = UI.getImage(     "left.png");
         imgRight  = UI.getImage(    "right.png");
 
+        // Temporary unit images
+        imgHead = UI.getImage("hack.png");
+        imgBody = UI.getImage("hack_body.png");
+
         addMouseListener(new FieldMouseListener(iface));
     }
 
@@ -67,12 +75,11 @@ class FieldDisplay extends JComponent {
                     drawTile(g, tile, imgTile);
 
         // Draw the units. (To do: fix)
-        /*
         for (Unit unit : iface.getUnitList()) {
-            drawTile(g, unit.getHead(), unit.getImgHead());
+            drawTile(g, unit.getHead(), imgHead);
             for (int i = 1; i < unit.sectors.size(); i++)
-                drawTile(g, unit.sectors.get(i), unit.getImgBody());
-        } */
+                drawTile(g, unit.sectors.get(i), imgBody);
+        }
 
         // If there is a selection, draw the selection overlay.
         Unit selected = iface.getSelectedUnit();
