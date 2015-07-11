@@ -12,7 +12,7 @@ default:
 	$(JC) $(JFLAGS) $(CLASSES)
 
 run: default
-	$(JVM) $(MAIN)
+	$(JVM) -ea $(MAIN)
 
 clean:
 	$(RM) -r $(PACKAGES)
