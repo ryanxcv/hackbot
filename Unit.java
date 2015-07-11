@@ -18,9 +18,6 @@ public abstract class Unit {
     protected int maxSize;
     protected int team;
 
-    protected String imgHead;
-    protected String imgBody;
-
     // Set up universal initial properties.
     protected void init(Tile tile) {
         sectors = new LinkedList<Tile>();
