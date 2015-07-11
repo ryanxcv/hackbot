@@ -44,14 +44,14 @@ public class Grid {
         return true;
     }
 
-    protected void addUnit(Unit unit) {
+    public void addUnit(Unit unit) {
         units.add(unit);
     }
 
     /**
      * Get the unit (if any) that occupies a chosen tile.
      */
-    protected Unit unitFromTile(Tile tile) {
+    public Unit unitFromTile(Tile tile) {
         // Iterate through all the programs.
         for (Unit u : units) {
             for (Tile t : u.sectors) {

@@ -14,8 +14,7 @@ import hackbotcore.*;
 /** An class derived from JComponent that displays a custom image. **/
 class FieldDisplay extends JComponent {
 
-    /** The grid to be displayed. **/
-    private Grid grid;
+    private GameInterface iface;
 
     /** The edge length of a tile in pixels. **/
     public static final int TILE_PIX_SIZE = 32;
@@ -30,12 +29,13 @@ class FieldDisplay extends JComponent {
     private BufferedImage imgRight;
 
     /** Class constructor for given dimensions. **/
-    public FieldDisplay(Grid grid) {
-        this.grid = grid;
+    public FieldDisplay(GameInterface iface) {
+        this.iface = iface;
 
         // Compute the necessary field size.
-        int columns = grid.tiles.length;
-        int rows    = grid.tiles[0].length;
+        Tile[][] tiles = iface.getGridTiles();
+        int columns = tiles.length;
+        int rows    = tiles[0].length;
         int width = columns * TILE_PIX_SIZE;
         int height = rows   * TILE_PIX_SIZE;
         setPreferredSize(new Dimension(width, height));
@@ -49,7 +49,7 @@ class FieldDisplay extends JComponent {
         imgLeft   = UI.getImage(     "left.png");
         imgRight  = UI.getImage(    "right.png");
 
-        addMouseListener(new FieldMouseListener());
+        addMouseListener(new FieldMouseListener(iface));
     }
 
     /** Display the current field data. **/
@@ -59,37 +59,40 @@ class FieldDisplay extends JComponent {
         // Draw the background image.
         g.drawImage(bgImage, 0, 0, bgImage.getWidth(), bgImage.getHeight(), null);
 
+        Tile[][] tiles = iface.getGridTiles();
         // Draw the tiles.
-        for (Tile[] column : grid.tiles)
+        for (Tile[] column : tiles)
             for (Tile tile : column)
                 if (tile.isFilled())
                     drawTile(g, tile, imgTile);
 
-        // Draw the units.
-        for (Unit unit : grid.units) {
-            drawTile(g, unit.getHead(), unit.imgHead);
+        // Draw the units. (To do: fix)
+        /*
+        for (Unit unit : iface.getUnitList()) {
+            drawTile(g, unit.getHead(), unit.getImgHead());
             for (int i = 1; i < unit.sectors.size(); i++)
-                drawTile(g, unit.sectors.get(i), unit.imgBody);
-        }
+                drawTile(g, unit.sectors.get(i), unit.getImgBody());
+        } */
 
         // If there is a selection, draw the selection overlay.
-        if (grid.selected == null)
+        Unit selected = iface.getSelectedUnit();
+        if (selected == null)
             return;
 
-        drawTile(g, grid.selected.getHead(), imgSelect);
+        drawTile(g, selected.getHead(), imgSelect);
 
         // Draw the movement overlays.
-        Tile selectionHead = grid.selected.getHead();
+        Tile selectionHead = selected.getHead();
         int column = selectionHead.getColumn();
         int row    = selectionHead.getRow();
         if (row > 0)
-            drawTile(g, grid.tiles[column][row - 1], imgUp);
-        if (row < grid.tiles[0].length - 1)
-            drawTile(g, grid.tiles[column][row + 1], imgDown);
+            drawTile(g, tiles[column][row - 1], imgUp);
+        if (row < tiles[0].length - 1)
+            drawTile(g, tiles[column][row + 1], imgDown);
         if (column > 0)
-            drawTile(g, grid.tiles[column - 1][row], imgLeft);
-        if (column < grid.tiles.length - 1)
-            drawTile(g, grid.tiles[column + 1][row], imgRight);
+            drawTile(g, tiles[column - 1][row], imgLeft);
+        if (column < tiles.length - 1)
+            drawTile(g, tiles[column + 1][row], imgRight);
     }
 
     /** Draw an image at a tile. **/
@@ -109,34 +112,43 @@ class FieldDisplay extends JComponent {
     /** Handles mouse clicks within the field object. **/
     private class FieldMouseListener extends MouseAdapter {
 
+        private GameInterface iface;
+
+        public FieldMouseListener(GameInterface iface) {
+            this.iface = iface;
+        }
+
         public void mouseClicked(MouseEvent e) {
             // Get the coords that were clicked.
             int[] coords = pixelToCoords(e.getX(), e.getY());
             // Ignore clicks outside of the playing field
             if (coords[0] == -1) { return; }
             // Get the tile that was clicked.
-            Tile clickedTile = grid.tiles[coords[0]][coords[1]];
-            Unit clickedUnit = grid.unitFromTile(clickedTile);
+            Tile[][] tiles = iface.getGridTiles();
+            Tile clickedTile = tiles[coords[0]][coords[1]];
+            Unit clickedUnit = iface.getGrid().unitFromTile(clickedTile);
+
+            Unit selected = iface.getSelectedUnit();
 
             // Program selection
-            if (grid.selected == null) {
-                grid.selected = clickedUnit;
+            if (selected == null) {
+                iface.selectUnit(clickedUnit);
                 repaint();
                 return;
             }
 
             // Movement
-            if (grid.selected.distance(coords[0], coords[1]) == 1) {
-                if (clickedUnit == null || grid.selected == clickedUnit) {
-                    grid.selected.move(clickedTile);
+            if (selected.distance(coords[0], coords[1]) == 1) {
+                if (clickedUnit == null || selected == clickedUnit) {
+                    iface.moveToTile(clickedTile);
                     repaint();
                 } else {
-                    grid.selected = clickedUnit;
+                    iface.selectUnit(clickedUnit);
                     repaint();
                 }
             // Deselection
-            } else if (grid.selected.distance(coords[0], coords[1]) > 1) {
-                grid.selected = clickedUnit;
+            } else if (selected.distance(coords[0], coords[1]) > 1) {
+                iface.selectUnit(clickedUnit);
                 repaint();
             }
         }

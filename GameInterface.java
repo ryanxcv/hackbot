@@ -12,6 +12,10 @@ public class GameInterface {
 
     protected Grid grid;
 
+    public GameInterface(Grid grid) {
+        this.grid = grid;
+    }
+
     /**
      * GAMESTATE COMMANDS
      *
@@ -63,10 +67,20 @@ public class GameInterface {
 
     /** Returns the selected unit. **/
     public Unit getSelectedUnit() {
-        return null;
+        return grid.selected;
     }
 
     /** Returns the selected attack. **/
     public void getSelectedAttack() {
+    }
+
+    /** Temporary accessor **/
+    public Grid getGrid() {
+        return grid;
+    }
+
+    /** Returns the grid tiles. **/
+    public Tile[][] getGridTiles() {
+        return grid.tiles;
     }
 }

@@ -23,13 +23,13 @@ public class Tile {
     }
 
     // Accessors for class properties.
-    protected int getColumn() { return column; }
-    protected int getRow() { return row; }
+    public int getColumn() { return column; }
+    public int getRow() { return row; }
 
     protected void setColumn(int c) { column = c; }
     protected void setRow(int c) { column = c; }
 
-    protected boolean isFilled() { return filled; }
+    public boolean isFilled() { return filled; }
 
     // Returns the travel distance to another tile.
     protected int distanceTo(Tile tile) {

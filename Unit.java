@@ -61,22 +61,31 @@ public abstract class Unit {
         }
     }
 
-    protected Tile getHead() {
+    public Tile getHead() {
         return sectors.getFirst();
     }
 
-    protected int distance(int column, int row) {
+    public String getImgHead() {
+        return imgHead;
+    }
+
+    public String getImgBody() {
+        return imgBody;
+    }
+
+    public int distance(int column, int row) {
         Tile head = getHead();
         return Math.abs(head.getColumn() - column) +
                Math.abs(head.getRow() - row);
     }
+
     protected int distance(Tile tile) {
         Tile head = getHead();
         return Math.abs(head.getColumn() - tile.getColumn()) +
                Math.abs(head.getRow() - tile.getRow());
     }
 
-    public class Hack extends Unit {
+    public static class Hack extends Unit {
 
         public Hack(Tile tile) {
             name = "Hack";
@@ -88,7 +97,7 @@ public abstract class Unit {
         }
     }
 
-    public class Sentinel extends Unit {
+    public static class Sentinel extends Unit {
 
         public Sentinel(Tile tile) {
             name = "Sentinel";

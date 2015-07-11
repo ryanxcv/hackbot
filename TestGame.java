@@ -1,6 +1,7 @@
 package hackbotui;
 
 import hackbotcore.*;
+import hackbotcore.Unit.*;
 
 public class TestGame {
 
@@ -9,9 +10,10 @@ public class TestGame {
 
         // Set up a test playing field.
         Grid grid = new Grid(10, 10);
-        grid.addUnit(new Unit.Hack(grid.tiles[1][1]));
-        grid.addUnit(new Unit.Sentinel(grid.tiles[6][4]));
+        GameInterface iface = new GameInterface(grid);
+        grid.addUnit(new Hack(iface.getGridTiles()[1][1]));
+        grid.addUnit(new Sentinel(iface.getGridTiles()[6][4]));
 
-        UI ui = new UI(grid);
+        UI ui = new UI(iface);
     }
 }

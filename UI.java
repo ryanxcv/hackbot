@@ -14,25 +14,24 @@ import hackbotcore.*;
 /**
  * The window that contains all of the game's UI elements.
  */
-public class UI extends JFrame{
+public class UI extends JFrame {
 
-    /** The grid that contains the game state. **/
-    private Grid grid;
+    private GameInterface iface;
 
     /** The player that is currently moving. **/
     private Player turn;
 
     /** Set up the interface. **/
-    public UI(Grid grid) {
+    public UI(GameInterface iface) {
         // Set up the main window.
-        this.grid = grid;
+        this.iface = iface;
         turn = Player.HUMAN;
         JFrame frame = new JFrame("Hackbot");
         Container c = frame.getContentPane();
         c.setBackground(Color.BLACK);
 
         // Set up the field display.
-        FieldDisplay field = new FieldDisplay(grid);
+        FieldDisplay field = new FieldDisplay(iface);
         frame.add(field, BorderLayout.CENTER);
 
         // Set up the side panel.
