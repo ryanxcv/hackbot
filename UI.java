@@ -13,10 +13,14 @@ public class UI extends JFrame{
     /** The grid that contains the game state. **/
     private Grid grid;
 
+    /** The player that is currently moving. **/
+    private Player turn;
+
     /** Set up the interface. **/
     public UI(Grid grid) {
         // Set up the main window.
         this.grid = grid;
+        turn = Player.HUMAN;
         JFrame frame = new JFrame("Hackbot");
         Container c = frame.getContentPane();
         c.setBackground(Color.BLACK);
@@ -34,5 +38,9 @@ public class UI extends JFrame{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setVisible(true);
+    }
+
+    public enum Player {
+        HUMAN, COMPUTER
     }
 }
