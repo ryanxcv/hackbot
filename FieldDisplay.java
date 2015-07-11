@@ -151,7 +151,7 @@ class FieldDisplay extends JComponent {
 
             // Movement
             if (selected.distance(coords) == 1) {
-                if (clickedUnit == null || selected == clickedUnit) {
+                if (clickedUnit == null || selected.contains(coords)) {
                     iface.moveToTile(coords);
                     repaint();
                 } else {

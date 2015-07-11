@@ -59,7 +59,7 @@ public abstract class Unit {
         // If the program moved over itself, remove any duplicate tiles.
         Coordinate head = getHead();
         for (int i = 1; i < sectors.size(); i++)
-            if (head == sectors.get(i)) {
+            if (head.equals(sectors.get(i))) {
                 sectors.remove(i);
                 return;
             }
@@ -77,6 +77,13 @@ public abstract class Unit {
 
     public int distance(Coordinate coord) {
         return getHead().distance(coord);
+    }
+
+    public boolean contains(Coordinate coord) {
+        for (Coordinate c : sectors)
+            if (coord.equals(c))
+                return true;
+        return false;
     }
 
     public Unit copy() {
