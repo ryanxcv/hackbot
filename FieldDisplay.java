@@ -42,12 +42,12 @@ class FieldDisplay extends JComponent {
 
         // Load images.
         bgImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        imgTile   = Unit.getImage(     "tile.png");
-        imgSelect = Unit.getImage("selection.png");
-        imgUp     = Unit.getImage(       "up.png");
-        imgDown   = Unit.getImage(     "down.png");
-        imgLeft   = Unit.getImage(     "left.png");
-        imgRight  = Unit.getImage(    "right.png");
+        imgTile   = UI.getImage(     "tile.png");
+        imgSelect = UI.getImage("selection.png");
+        imgUp     = UI.getImage(       "up.png");
+        imgDown   = UI.getImage(     "down.png");
+        imgLeft   = UI.getImage(     "left.png");
+        imgRight  = UI.getImage(    "right.png");
 
         addMouseListener(new FieldMouseListener());
     }

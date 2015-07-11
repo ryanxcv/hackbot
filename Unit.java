@@ -1,10 +1,6 @@
 package hackbotcore;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
-import javax.imageio.ImageIO;
 
 /**
  * All of the battling programs inherit from this general class, called Unit.
@@ -22,20 +18,13 @@ public abstract class Unit {
     protected int maxSize;
     protected int team;
 
-    protected BufferedImage imgHead;
-    protected BufferedImage imgBody;
+    protected String imgHead;
+    protected String imgBody;
 
     // Set up universal initial properties.
     protected void init(Tile tile) {
         sectors = new LinkedList<Tile>();
         sectors.add(tile);
-        getUnitImages();
-    }
-
-    protected void getUnitImages() {
-        String fileStr = name.toLowerCase();
-        imgHead = getImage(fileStr +      ".png");
-        imgBody = getImage(fileStr + "_body.png");
     }
 
     protected void setDone() { done = true; }
@@ -74,15 +63,6 @@ public abstract class Unit {
 
     protected Tile getHead() {
         return sectors.getFirst();
-    }
-
-    protected static BufferedImage getImage(String filename) {
-        try {
-            return ImageIO.read(new File("img/" + filename));
-        } catch (IOException e) {
-            System.out.println("Warning: " + filename + " failed to load.");
-        }
-        return null;
     }
 
     protected int distance(int column, int row) {

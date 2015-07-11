@@ -3,6 +3,10 @@ package hackbotui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import hackbotcore.*;
@@ -44,5 +48,14 @@ public class UI extends JFrame{
 
     public enum Player {
         HUMAN, COMPUTER
+    }
+
+    public static BufferedImage getImage(String filename) {
+        try {
+            return ImageIO.read(new File("img/" + filename));
+        } catch (IOException e) {
+            System.out.println("Warning: " + filename + " failed to load.");
+        }
+        return null;
     }
 }
