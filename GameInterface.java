@@ -9,7 +9,7 @@ import java.util.LinkedList;
  */
 public class GameInterface {
 
-    protected Grid grid;
+    private Grid grid;
 
     public GameInterface(Grid grid) {
         this.grid = grid;

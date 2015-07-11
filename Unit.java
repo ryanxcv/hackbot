@@ -8,7 +8,7 @@ import java.util.LinkedList;
  */
 public abstract class Unit {
 
-    protected LinkedList<Tile> sectors;
+    public LinkedList<Tile> sectors;
     protected int moves;
     private boolean done;
 

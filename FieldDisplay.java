@@ -109,6 +109,18 @@ class FieldDisplay extends JComponent {
                          y / TILE_PIX_SIZE};
     }
 
+    /**
+     * Get the unit (if any) that occupies a chosen tile.
+     */
+    public Unit unitFromTile(Tile tile) {
+        // Iterate through all the programs.
+        for (Unit u : iface.getUnitList())
+            for (Tile t : u.sectors)
+                if (tile == t)
+                    return u;
+        return null;
+    }
+
     /** Handles mouse clicks within the field object. **/
     private class FieldMouseListener extends MouseAdapter {
 
@@ -126,7 +138,7 @@ class FieldDisplay extends JComponent {
             // Get the tile that was clicked.
             Tile[][] tiles = iface.getGridTiles();
             Tile clickedTile = tiles[coords[0]][coords[1]];
-            Unit clickedUnit = iface.getGrid().unitFromTile(clickedTile);
+            Unit clickedUnit = unitFromTile(clickedTile);
 
             Unit selected = iface.getSelectedUnit();
 
