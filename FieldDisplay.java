@@ -144,7 +144,7 @@ class FieldDisplay extends JComponent {
 
             // Program selection
             if (selected == null) {
-                iface.selectUnit(clickedUnit);
+                iface.selectUnit(coords);
                 repaint();
                 return;
             }
@@ -155,12 +155,12 @@ class FieldDisplay extends JComponent {
                     iface.moveToTile(coords);
                     repaint();
                 } else {
-                    iface.selectUnit(clickedUnit);
+                    iface.selectUnit(coords);
                     repaint();
                 }
             // Deselection
             } else if (selected.distance(coords) > 1) {
-                iface.selectUnit(clickedUnit);
+                iface.selectUnit(coords);
                 repaint();
             }
         }

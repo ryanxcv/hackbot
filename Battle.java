@@ -25,8 +25,16 @@ public class Battle {
     }
 
     protected int getWidth() { return columns; }
-
     protected int getHeight() { return rows; }
+
+    /**
+     * Runs at the start of each turn to set up units.
+     */
+    protected void beginTurn() {
+        for (Unit u : units) {
+            u.reset();
+        }
+    }
 
     /**
      * This function tells a program whether it is possible for it to occupy a

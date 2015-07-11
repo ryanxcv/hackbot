@@ -26,18 +26,20 @@ public class GameInterface {
      */
 
      /** Selects a given unit. **/
-    public boolean selectUnit(Unit unit) {
+    public boolean selectUnit(Coordinate coord) {
+        Unit unit = battle.unitFromTile(coord);
         battle.selected = unit;
         return battle.selected == null;
     }
 
     /** Moves the selected unit to a given tile. **/
     public boolean moveToTile(Coordinate coord) {
-        // Make sure the tile is filled (to do)
+        // Check if the unit's done
+        if (battle.selected.isDone())
+            return false;
 
-
-        Unit unitAtTile = battle.unitFromTile(coord);
-        if (unitAtTile != null)
+        // Check if the destination is valid
+        if (!battle.canOccupy(battle.selected, coord))
             return false;
 
         // Movement is successful. Make the move and return true.
@@ -60,8 +62,11 @@ public class GameInterface {
         return false;
     }
 
-    public boolean done() {
-        return false;
+    public boolean setDone() {
+        if (battle.selected.isDone())
+            return false;
+        battle.selected.setDone();
+        return true;
     }
 
     /**

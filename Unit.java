@@ -22,11 +22,13 @@ public abstract class Unit {
     // Set up universal initial properties.
     protected void init(Coordinate coord) {
         moves = speed;
+        done = false;
         sectors = new LinkedList<Coordinate>();
         sectors.add(coord);
     }
 
     protected void setDone() { done = true; }
+    protected boolean isDone() { return done; }
 
     /**
      * This method is run at the beginning of each turn.
@@ -42,17 +44,25 @@ public abstract class Unit {
      * if already at max size.
      */
     protected void move(Coordinate coord) {
+        // Reduce moves.
+        assert moves > 0 : moves;
+        assert !done;
+        moves--;
+
+        // If now out of moves, set done to true.
+        if (moves == 0)
+            setDone();
+
         // Insert the tile as the new head.
         sectors.add(0, coord);
 
         // If the program moved over itself, remove any duplicate tiles.
         Coordinate head = getHead();
-        for (int i = 1; i < sectors.size(); i++) {
+        for (int i = 1; i < sectors.size(); i++)
             if (head == sectors.get(i)) {
                 sectors.remove(i);
                 return;
             }
-        }
 
         // If the program is over max size, trim it down to comply.
         if (sectors.size() > maxSize)
@@ -67,6 +77,30 @@ public abstract class Unit {
 
     public int distance(Coordinate coord) {
         return getHead().distance(coord);
+    }
+
+    public Unit copy() {
+        Unit copy = null;
+        if (this.getClass().equals(Hack.class))
+            copy = new Hack(new Coordinate(0, 0));
+        else // if (this.getClass().equals(Sentinel.class))
+            copy = new Sentinel(new Coordinate(0, 0));
+        copy.sectors = sectorsCopy();
+        copy.moves = moves;
+        if (isDone())
+            copy.setDone();
+        copy.name = name;
+        copy.speed = speed;
+        copy.maxSize = maxSize;
+        copy.team = team;
+        return copy;
+    }
+
+    public LinkedList<Coordinate> sectorsCopy() {
+        LinkedList<Coordinate> copy = new LinkedList<Coordinate>();
+        for (Coordinate coord : sectors)
+            copy.add(coord.copy());
+        return copy;
     }
 
     public static class Hack extends Unit {
