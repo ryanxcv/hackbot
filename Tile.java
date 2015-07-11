@@ -23,16 +23,16 @@ public class Tile {
     }
 
     // Accessors for class properties.
-    public int getColumn() { return column; }
-    public int getRow() { return row; }
+    protected int getColumn() { return column; }
+    protected int getRow() { return row; }
 
-    public void setColumn(int c) { column = c; }
-    public void setRow(int c) { column = c; }
+    protected void setColumn(int c) { column = c; }
+    protected void setRow(int c) { column = c; }
 
-    public boolean isFilled() { return filled; }
+    protected boolean isFilled() { return filled; }
 
     // Returns the travel distance to another tile.
-    public int distanceTo(Tile tile) {
+    protected int distanceTo(Tile tile) {
         return Math.abs(this.column - tile.getColumn()) +
                Math.abs(this.row    - tile.getRow());
     }
@@ -41,11 +41,11 @@ public class Tile {
      * Returns the pixel coordinates of this tile, given the size of a tile in
      * pixels and the offset of the grid.
      */
-    public int[] position(int tileSize, int xOffSet, int yOffSet) {
+    protected int[] position(int tileSize, int xOffSet, int yOffSet) {
         return new int[] {column * tileSize + xOffSet, row * tileSize + yOffSet};
     }
 
-    public int[] coords() {
+    protected int[] coords() {
         return new int[] {column, row};
     }
 }

@@ -12,38 +12,38 @@ import javax.imageio.ImageIO;
  */
 public abstract class Unit {
 
-    public LinkedList<Tile> sectors;
+    protected LinkedList<Tile> sectors;
     protected int moves;
     private boolean done;
 
     // The following fields will be set by a program's constructor.
-    public String name;
+    protected String name;
     protected int speed;
     protected int maxSize;
-    public int team;
+    protected int team;
 
-    public BufferedImage imgHead;
-    public BufferedImage imgBody;
+    protected BufferedImage imgHead;
+    protected BufferedImage imgBody;
 
     // Set up universal initial properties.
-    public void init(Tile tile) {
+    protected void init(Tile tile) {
         sectors = new LinkedList<Tile>();
         sectors.add(tile);
         getUnitImages();
     }
 
-    public void getUnitImages() {
+    protected void getUnitImages() {
         String fileStr = name.toLowerCase();
         imgHead = getImage(fileStr +      ".png");
         imgBody = getImage(fileStr + "_body.png");
     }
 
-    public void setDone() { done = true; }
+    protected void setDone() { done = true; }
 
     /**
      * This method is run at the beginning of each turn.
      */
-    public void reset() {
+    protected void reset() {
         moves = speed;
         done = false;
     }
@@ -53,7 +53,7 @@ public abstract class Unit {
      * occupable). This tile becomes the new head, and the unit is shrunk
      * if already at max size.
      */
-    public void move(Tile tile) {
+    protected void move(Tile tile) {
         // Insert the tile as the new head.
         sectors.add(0, tile);
 
@@ -72,11 +72,11 @@ public abstract class Unit {
         }
     }
 
-    public Tile getHead() {
+    protected Tile getHead() {
         return sectors.getFirst();
     }
 
-    public static BufferedImage getImage(String filename) {
+    protected static BufferedImage getImage(String filename) {
         try {
             return ImageIO.read(new File("img/" + filename));
         } catch (IOException e) {
@@ -85,12 +85,12 @@ public abstract class Unit {
         return null;
     }
 
-    public int distance(int column, int row) {
+    protected int distance(int column, int row) {
         Tile head = getHead();
         return Math.abs(head.getColumn() - column) +
                Math.abs(head.getRow() - row);
     }
-    public int distance(Tile tile) {
+    protected int distance(Tile tile) {
         Tile head = getHead();
         return Math.abs(head.getColumn() - tile.getColumn()) +
                Math.abs(head.getRow() - tile.getRow());

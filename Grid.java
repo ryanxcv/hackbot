@@ -13,9 +13,9 @@ import java.util.Map;
  */
 public class Grid {
 
-    public Tile[][] tiles;
-    public LinkedList<Unit> units;
-    public Unit selected;
+    protected Tile[][] tiles;
+    protected LinkedList<Unit> units;
+    protected Unit selected;
 
     public Grid(int columns, int rows) {
         units = new LinkedList<Unit>();
@@ -33,7 +33,7 @@ public class Grid {
      * given tile; i.e, the tile is not already occupied by another program,
      * zeroed by a Bit-Man, etc.
      */
-    public boolean canOccupy(Unit unit, Tile tile) {
+    protected boolean canOccupy(Unit unit, Tile tile) {
         // Check if the program already occupies that tile.
         if (unit.sectors.contains(tile)) { return true; }
 
@@ -44,14 +44,14 @@ public class Grid {
         return true;
     }
 
-    public void addUnit(Unit unit) {
+    protected void addUnit(Unit unit) {
         units.add(unit);
     }
 
     /**
      * Get the unit (if any) that occupies a chosen tile.
      */
-    public Unit unitFromTile(Tile tile) {
+    protected Unit unitFromTile(Tile tile) {
         // Iterate through all the programs.
         for (Unit u : units) {
             for (Tile t : u.sectors) {
