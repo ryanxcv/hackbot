@@ -9,6 +9,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import java.applet.AudioClip;
+
 import hackbotcore.GameInterface;
 
 public class SidePanel extends JPanel {
@@ -16,10 +18,14 @@ public class SidePanel extends JPanel {
     private GameInterface iface;
     private FieldDisplay field;
 
+    private AudioClip sndUndo;
+
     public SidePanel(GameInterface iface, FieldDisplay field) {
         super();
         this.iface = iface;
         this.field = field;
+        sndUndo = UI.getSound("sound5.wav");
+
         BoxLayout boxLayout1 = new BoxLayout(this, BoxLayout.Y_AXIS);
         setLayout(boxLayout1);
         add(Box.createVerticalGlue());
@@ -39,10 +45,16 @@ public class SidePanel extends JPanel {
         add(undoButton, BorderLayout.WEST);
     }
 
+    public void tryUndo() {
+        if (iface.undo()) {
+            sndUndo.play();
+            field.repaint();
+        }
+    }
+
     public class UndoButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            if (iface.undo())
-                field.repaint();
+            tryUndo();
         }
     }
 }
