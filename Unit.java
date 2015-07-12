@@ -12,13 +12,15 @@ public abstract class Unit {
     public LinkedList<Coordinate> sectors;
     public LinkedList<Coordinate> savedSectors;
     protected int moves;
-    private boolean done;
+    private TurnState state;
 
     // The following fields will be set by a program's constructor.
     protected String name;
     protected int speed;
     protected int maxSize;
     protected int team;
+
+    public static enum TurnState { READY, MOVING, USING_ABILITY, DONE, }
 
     // Set up universal initial properties.
     protected void init(Coordinate coord) {
@@ -27,8 +29,9 @@ public abstract class Unit {
         reset();
     }
 
-    protected void setDone() { done = true; }
-    public boolean isDone() { return done; }
+    protected void setDone() { state = TurnState.DONE; }
+    public boolean isDone() { return state == TurnState.DONE; }
+    public TurnState getState() { return state; }
 
     public int getMoves() { return moves; }
 
@@ -38,7 +41,7 @@ public abstract class Unit {
     protected void reset() {
         savedSectors = sectorsCopy();
         moves = speed;
-        done = false;
+        state = TurnState.READY;
     }
 
     protected void deselect() {
@@ -51,7 +54,7 @@ public abstract class Unit {
      * done. Returns true on success.
      */
     protected boolean undo() {
-        if (done)
+        if (isDone())
             return false;
         sectors = savedSectors;
         reset();
@@ -64,6 +67,13 @@ public abstract class Unit {
      * if already at max size.
      */
     protected void move(Coordinate coord) {
+        assert moves > 0;
+
+        if (state == TurnState.READY)
+            state = TurnState.MOVING;
+        else
+            assert state == TurnState.MOVING;
+
         // Reduce moves.
         moves--;
 
