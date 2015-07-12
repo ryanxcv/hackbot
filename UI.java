@@ -22,12 +22,17 @@ public class UI extends JFrame {
 
     private GameInterface iface;
 
+    private TopBar top;
     private FieldDisplay field;
     private SidePanel side;
+
+    /** Images **/
+    private BufferedImage imgTurn;
 
     /** Audio **/
     private AudioClip sndMove;
     private AudioClip sndSelect;
+    private AudioClip sndTurn;
     private AudioClip sndUndo;
 
     /** The player that is currently moving. **/
@@ -35,30 +40,45 @@ public class UI extends JFrame {
 
     /** Set up the interface. **/
     public UI(GameInterface iface) {
+        super("Hackbot");
         // Set up the main window.
         this.iface = iface;
         turn = Player.HUMAN;
-        JFrame frame = new JFrame("Hackbot");
-        frame.getContentPane().setBackground(Color.BLACK);
+        //JFrame frame = new JFrame("Hackbot");
+        getContentPane().setBackground(Color.BLACK);
+
+        // Set up the top bar.
+        top = new TopBar(iface, this);
+        add(top, BorderLayout.NORTH);
 
         // Set up the field display.
         field = new FieldDisplay(iface, this);
-        frame.add(field, BorderLayout.CENTER);
+        add(field, BorderLayout.CENTER);
 
         // Set up the side panel.
         side = new SidePanel(iface, this);
-        frame.add(side, BorderLayout.WEST);
+        add(side, BorderLayout.WEST);
+
+        // Load images.
+        imgTurn = getImage("turn.png");
 
         // Load sounds.
-        sndMove   = UI.getSound("sound2.wav");
-        sndSelect = UI.getSound("sound7.wav");
-        sndUndo   = UI.getSound("sound5.wav");
+        sndMove   = getSound("sound2.wav");
+        sndSelect = getSound("sound7.wav");
+        sndTurn   = getSound("sound1.wav");
+        sndUndo   = getSound("sound5.wav");
 
         // Finalize the main window.
-        frame.pack();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        frame.setVisible(true);
+        pack();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
+        setVisible(true);
+    }
+
+    protected void update() {
+        repaint();
+        field.repaint();
+        side.update();
     }
 
     protected void updateField() {
@@ -94,6 +114,19 @@ public class UI extends JFrame {
             updateField();
             updateSide();
         }
+    }
+
+    protected void passTurn() {
+        sndTurn.play();
+        getGraphics().drawImage(imgTurn, 100, 100, this);
+        //repaint();
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        iface.passTurn();
+        update();
     }
 
     protected enum Player {

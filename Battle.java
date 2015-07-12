@@ -53,6 +53,14 @@ public class Battle {
         return true;
     }
 
+    protected void selectFirst() {
+        for (Unit u : units)
+            if (u.team == turn) {
+                selected = u;
+                return;
+            }
+    }
+
     /**
      * This function tells a program whether it is possible for it to occupy a
      * given tile; i.e, the tile is not already occupied by another program,

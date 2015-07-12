@@ -82,6 +82,7 @@ public class GameInterface {
 
     public void passTurn() {
         battle.passTurn();
+        battle.selectFirst();
     }
 
     /**

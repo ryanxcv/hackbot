@@ -60,9 +60,8 @@ public class SidePanel extends JPanel {
         public InfoPane(String title) {
             super(title);
 
-            Container c = getContentPane();
-            BoxLayout layout = new BoxLayout(c, BoxLayout.Y_AXIS);
-            c.setLayout(layout);
+            BoxLayout layout = new BoxLayout(getContentPane(), BoxLayout.Y_AXIS);
+            setLayout(layout);
             add(Box.createVerticalGlue());
 
             name    = new JLabel();
