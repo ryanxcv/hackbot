@@ -20,6 +20,7 @@ import hackbotutil.Coordinate;
 class FieldDisplay extends JComponent {
 
     private GameInterface iface;
+    private UI ui;
 
     /** The images to use for each unit. **/
     private Map<Class, BufferedImage[]> unitImages;
@@ -41,13 +42,10 @@ class FieldDisplay extends JComponent {
     // Fallback unit images
     private BufferedImage[] unknownUnit;
 
-    /** Audio **/
-    private AudioClip sndSelect;
-    private AudioClip sndMove;
-
     /** Class constructor. **/
-    public FieldDisplay(GameInterface iface) {
+    public FieldDisplay(GameInterface iface, UI ui) {
         this.iface = iface;
+        this.ui    = ui;
 
         // Compute the necessary field size.
         int columns = iface.getWidth();
@@ -73,10 +71,6 @@ class FieldDisplay extends JComponent {
             if (!unitImages.containsKey(u.getClass()))
                 unitImages.put(u.getClass(), getUnitImages(u));
         unknownUnit = getUnitImages("unknown");
-
-        // Load sounds.
-        sndSelect = UI.getSound("sound6.wav");
-        sndMove   = UI.getSound("sound2.wav");
 
         addMouseListener(new FieldMouseListener(iface));
     }
@@ -177,24 +171,6 @@ class FieldDisplay extends JComponent {
         return null;
     }
 
-    public void trySelect(Coordinate coord) {
-        if (iface.selectUnit(coord)) {
-            if (iface.getSelectedUnit() != null) {
-                sndSelect.play();
-            }
-            repaint();
-        }
-    }
-
-    public void tryMove(Coordinate coord) {
-        if (iface.moveToTile(coord)) {
-            sndMove.play();
-            repaint();
-        } else {
-            System.out.println("Movement failed");
-        }
-    }
-
     /** Handles mouse clicks within the field object. **/
     private class FieldMouseListener extends MouseAdapter {
 
@@ -215,7 +191,7 @@ class FieldDisplay extends JComponent {
 
             // Program selection
             if (selected == null) {
-                trySelect(coords);
+                ui.trySelect(coords);
                 return;
             }
 
@@ -223,16 +199,16 @@ class FieldDisplay extends JComponent {
                 // Movement
                 if (selected.distance(coords) == 1) {
                     if (clickedUnit == null || selected.contains(coords)) {
-                        tryMove(coords);
+                        ui.tryMove(coords);
                     } else {
-                        trySelect(coords);
+                        ui.trySelect(coords);
                     }
                 // Deselection
                 } else if (selected.distance(coords) > 1) {
-                    trySelect(coords);
+                    ui.trySelect(coords);
                 }
             } else {
-                trySelect(coords);
+                ui.trySelect(coords);
             }
 
         }

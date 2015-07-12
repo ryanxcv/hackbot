@@ -29,12 +29,14 @@ public abstract class Unit {
         reset();
     }
 
-    public String getName() { return name; }
     protected void setDone() { state = TurnState.DONE; }
     public boolean isDone() { return state == TurnState.DONE; }
     public TurnState getState() { return state; }
 
     public int getMoves() { return moves; }
+    public String getName() { return name; }
+    public int getSpeed() { return speed; }
+    public int getMaxSize() { return maxSize; }
 
     /**
      * This method is run at the beginning of each turn.

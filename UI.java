@@ -13,6 +13,7 @@ import java.applet.AudioClip;
 import java.net.URL;
 
 import hackbotcore.*;
+import hackbotutil.Coordinate;
 
 /**
  * The window that contains all of the game's UI elements.
@@ -20,6 +21,14 @@ import hackbotcore.*;
 public class UI extends JFrame {
 
     private GameInterface iface;
+
+    private FieldDisplay field;
+    private SidePanel side;
+
+    /** Audio **/
+    private AudioClip sndMove;
+    private AudioClip sndSelect;
+    private AudioClip sndUndo;
 
     /** The player that is currently moving. **/
     private Player turn;
@@ -33,12 +42,17 @@ public class UI extends JFrame {
         frame.getContentPane().setBackground(Color.BLACK);
 
         // Set up the field display.
-        FieldDisplay field = new FieldDisplay(iface);
+        field = new FieldDisplay(iface, this);
         frame.add(field, BorderLayout.CENTER);
 
         // Set up the side panel.
-        SidePanel side = new SidePanel(iface, field);
+        side = new SidePanel(iface, this);
         frame.add(side, BorderLayout.WEST);
+
+        // Load sounds.
+        sndMove   = UI.getSound("sound2.wav");
+        sndSelect = UI.getSound("sound6.wav");
+        sndUndo   = UI.getSound("sound5.wav");
 
         // Finalize the main window.
         frame.pack();
@@ -47,11 +61,46 @@ public class UI extends JFrame {
         frame.setVisible(true);
     }
 
-    public enum Player {
+    protected void updateField() {
+        field.repaint();
+    }
+
+    protected void updateSide() {
+        side.update();
+    }
+
+    public void trySelect(Coordinate coord) {
+        if (iface.selectUnit(coord)) {
+            if (iface.getSelectedUnit() != null)
+                sndSelect.play();
+            updateField();
+            updateSide();
+        }
+    }
+
+    public void tryMove(Coordinate coord) {
+        if (iface.moveToTile(coord)) {
+            sndMove.play();
+            updateField();
+            updateSide();
+        } else {
+            System.out.println("Movement failed");
+        }
+    }
+
+    protected void tryUndo() {
+        if (iface.undo()) {
+            sndUndo.play();
+            updateField();
+            updateSide();
+        }
+    }
+
+    protected enum Player {
         HUMAN, COMPUTER
     }
 
-    public static BufferedImage getImage(String filename) {
+    protected static BufferedImage getImage(String filename) {
         try {
             return ImageIO.read(new File("img/" + filename));
         } catch (IOException e) {
@@ -60,7 +109,7 @@ public class UI extends JFrame {
         return null;
     }
 
-    public static AudioClip getSound(String filename) {
+    protected static AudioClip getSound(String filename) {
         try {
             File file = new File("sound/" + filename);
             return Applet.newAudioClip(file.toURI().toURL());
