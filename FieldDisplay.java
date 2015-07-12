@@ -194,17 +194,22 @@ class FieldDisplay extends JComponent {
                 return;
             }
 
-            // Movement
-            if (selected.distance(coords) == 1) {
-                if (clickedUnit == null || selected.contains(coords)) {
-                    tryMove(coords);
-                } else {
+            if (selected.getMoves() > 0) {
+                // Movement
+                if (selected.distance(coords) == 1) {
+                    if (clickedUnit == null || selected.contains(coords)) {
+                        tryMove(coords);
+                    } else {
+                        trySelect(coords);
+                    }
+                // Deselection
+                } else if (selected.distance(coords) > 1) {
                     trySelect(coords);
                 }
-            // Deselection
-            } else if (selected.distance(coords) > 1) {
+            } else {
                 trySelect(coords);
             }
+
         }
     }
 }
