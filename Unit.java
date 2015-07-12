@@ -18,9 +18,10 @@ public abstract class Unit {
     protected String name;
     protected int speed;
     protected int maxSize;
-    protected int team;
+    protected Team team;
 
-    public static enum TurnState { READY, MOVING, USING_ABILITY, DONE, }
+    public static enum Team { PLAYER, COMPUTER }
+    public static enum TurnState { READY, MOVING, USING_ABILITY, DONE }
 
     // Set up universal initial properties.
     protected void init(Coordinate coord) {
@@ -37,6 +38,7 @@ public abstract class Unit {
     public String getName() { return name; }
     public int getSpeed() { return speed; }
     public int getMaxSize() { return maxSize; }
+    public Team getTeam() { return team; }
 
     /**
      * This method is run at the beginning of each turn.
@@ -143,7 +145,7 @@ public abstract class Unit {
             name = "Hack";
             speed = 2;
             maxSize = 4;
-            team = 0;
+            team = Team.PLAYER;
 
             init(coord);
         }
@@ -155,7 +157,7 @@ public abstract class Unit {
             name = "Sentinel";
             speed = 1;
             maxSize = 4;
-            team = 1;
+            team = Team.COMPUTER;
 
             init(coord);
         }
