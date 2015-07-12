@@ -51,7 +51,7 @@ public class UI extends JFrame {
 
         // Load sounds.
         sndMove   = UI.getSound("sound2.wav");
-        sndSelect = UI.getSound("sound6.wav");
+        sndSelect = UI.getSound("sound7.wav");
         sndUndo   = UI.getSound("sound5.wav");
 
         // Finalize the main window.
