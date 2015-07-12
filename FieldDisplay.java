@@ -68,7 +68,7 @@ class FieldDisplay extends JComponent {
         imgBody = UI.getImage("hack_body.png");
 
         // Load sounds.
-        sndSelect = UI.getSound("sound1.wav");
+        sndSelect = UI.getSound("sound6.wav");
         sndMove   = UI.getSound("sound2.wav");
 
         addMouseListener(new FieldMouseListener(iface));
@@ -119,7 +119,6 @@ class FieldDisplay extends JComponent {
 
         if (selected.getMoves() == 1)
             return;
-        System.out.println(selected.getMoves());
         drawTiles(g, selectionHead.distanceSet(selected.getMoves(), 1), imgMove);
 
     }
@@ -153,6 +152,24 @@ class FieldDisplay extends JComponent {
         return null;
     }
 
+    public void trySelect(Coordinate coord) {
+        if (iface.selectUnit(coord)) {
+            if (iface.getSelectedUnit() != null) {
+                sndSelect.play();
+            }
+            repaint();
+        }
+    }
+
+    public void tryMove(Coordinate coord) {
+        if (iface.moveToTile(coord)) {
+            sndMove.play();
+            repaint();
+        } else {
+            System.out.println("Movement failed");
+        }
+    }
+
     /** Handles mouse clicks within the field object. **/
     private class FieldMouseListener extends MouseAdapter {
 
@@ -173,28 +190,20 @@ class FieldDisplay extends JComponent {
 
             // Program selection
             if (selected == null) {
-                if (iface.selectUnit(coords)) {
-                    sndSelect.play();
-                    repaint();
-                }
+                trySelect(coords);
                 return;
             }
 
             // Movement
             if (selected.distance(coords) == 1) {
                 if (clickedUnit == null || selected.contains(coords)) {
-                    if (iface.moveToTile(coords))
-                        repaint();
-                    else
-                        System.out.println("Movement failed");
+                    tryMove(coords);
                 } else {
-                    if (iface.selectUnit(coords));
-                        repaint();
+                    trySelect(coords);
                 }
             // Deselection
             } else if (selected.distance(coords) > 1) {
-                if (iface.selectUnit(coords));
-                    repaint();
+                trySelect(coords);
             }
         }
     }
