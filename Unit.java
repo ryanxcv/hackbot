@@ -29,6 +29,7 @@ public abstract class Unit {
         reset();
     }
 
+    public String getName() { return name; }
     protected void setDone() { state = TurnState.DONE; }
     public boolean isDone() { return state == TurnState.DONE; }
     public TurnState getState() { return state; }

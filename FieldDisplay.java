@@ -7,6 +7,8 @@ import java.awt.image.BufferedImage;
 import java.awt.Image;
 import java.awt.Graphics;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JComponent;
 
 import java.applet.AudioClip;
@@ -18,6 +20,9 @@ import hackbotutil.Coordinate;
 class FieldDisplay extends JComponent {
 
     private GameInterface iface;
+
+    /** The images to use for each unit. **/
+    private Map<Class, BufferedImage[]> unitImages;
 
     /** The edge length of a tile in pixels. **/
     public static final int TILE_PIX_SIZE = 32;
@@ -33,9 +38,8 @@ class FieldDisplay extends JComponent {
     private BufferedImage imgLeft;
     private BufferedImage imgRight;
 
-    // Temporary unit images
-    private BufferedImage imgHead;
-    private BufferedImage imgBody;
+    // Fallback unit images
+    private BufferedImage[] unknownUnit;
 
     /** Audio **/
     private AudioClip sndSelect;
@@ -63,15 +67,30 @@ class FieldDisplay extends JComponent {
         imgLeft   = UI.getImage(     "left.png");
         imgRight  = UI.getImage(    "right.png");
 
-        // Temporary unit images
-        imgHead = UI.getImage("hack.png");
-        imgBody = UI.getImage("hack_body.png");
+        // Get unit images
+        unitImages = new HashMap<Class, BufferedImage[]>();
+        for (Unit u : iface.getUnitList())
+            if (!unitImages.containsKey(u.getClass()))
+                unitImages.put(u.getClass(), getUnitImages(u));
+        unknownUnit = getUnitImages("unknown");
 
         // Load sounds.
         sndSelect = UI.getSound("sound6.wav");
         sndMove   = UI.getSound("sound2.wav");
 
         addMouseListener(new FieldMouseListener(iface));
+    }
+
+    /**
+     * Get a unit's image based on the unit's name fiel, assuming that all the
+     * properly named images are already in the correct resource folder.
+     */
+    public static BufferedImage[] getUnitImages(String filename) {
+         return new BufferedImage[] { UI.getImage(filename + ".png"),
+                                      UI.getImage(filename + "_body.png") };
+    }
+    public static BufferedImage[] getUnitImages(Unit unit) {
+        return getUnitImages(unit.getName().toLowerCase());
     }
 
     /** Display the current field data. **/
@@ -86,13 +105,19 @@ class FieldDisplay extends JComponent {
             for (int r = 0; r < iface.getHeight(); r++)
                 drawTile(g, new Coordinate(c, r), imgTile);
 
-        // Draw the units. (To do: fix)
+        // Draw the units.
         for (Unit unit : iface.getUnitList()) {
-            drawTile(g, unit.getHead(), imgHead);
+            // Find that unit's images.
+            Image[] images = unitImages.get(unit.getClass());
+            if (images == null)
+                images = unknownUnit;
+
+            // Draw that unit's images.
+            drawTile(g, unit.getHead(), images[0]);
             if (unit.isDone())
                 drawTile(g, unit.getHead(), imgDone);
             for (int i = 1; i < unit.sectors.size(); i++)
-                drawTile(g, unit.sectors.get(i), imgBody);
+                drawTile(g, unit.sectors.get(i), images[1]);
         }
 
         // If there is a selection, draw the selection overlay.
