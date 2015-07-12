@@ -29,7 +29,6 @@ class FieldDisplay extends JComponent {
     public static final int TILE_PIX_SIZE = 32;
 
     /** Images **/
-    private BufferedImage bgImage;
     private BufferedImage imgTile;
     private BufferedImage imgDone;
     private BufferedImage imgSelect;
@@ -55,7 +54,6 @@ class FieldDisplay extends JComponent {
         setPreferredSize(new Dimension(width, height));
 
         // Load images.
-        bgImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         imgTile   = UI.getImage(     "tile.png");
         imgDone   = UI.getImage(     "done.png");
         imgSelect = UI.getImage("selection.png");
@@ -90,9 +88,6 @@ class FieldDisplay extends JComponent {
     /** Display the current field data. **/
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
-        // Draw the background image.
-        g.drawImage(bgImage, 0, 0, bgImage.getWidth(), bgImage.getHeight(), null);
 
         // Draw the tiles.
         for (int c = 0; c < iface.getWidth(); c++)

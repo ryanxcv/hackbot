@@ -27,6 +27,7 @@ public class UI extends JFrame {
     private SidePanel side;
 
     /** Images **/
+    private BufferedImage imgBG;
     private BufferedImage imgTurn;
 
     /** Audio **/
