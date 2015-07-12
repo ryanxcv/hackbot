@@ -17,15 +17,20 @@ public class Battle {
     protected LinkedList<Unit> units;
     protected Unit selected;
 
+    private Unit.Team turn;
+
     public Battle(int columns, int rows) {
         units = new LinkedList<Unit>();
         selected = null;
+        turn = Unit.Team.PLAYER;
         this.columns = columns;
         this.rows    = rows;
     }
 
     protected int getWidth() { return columns; }
     protected int getHeight() { return rows; }
+
+    protected Unit.Team getTurn() { return turn; }
 
     /**
      * Runs at the start of each turn to set up units.
@@ -34,6 +39,18 @@ public class Battle {
         for (Unit u : units) {
             u.reset();
         }
+    }
+
+    protected void passTurn() {
+        turn = turn.next();
+        beginTurn();
+    }
+
+    private boolean allUnitsDone() {
+        for (Unit u : units)
+            if (u.team == turn && !u.isDone())
+                return false;
+        return true;
     }
 
     /**

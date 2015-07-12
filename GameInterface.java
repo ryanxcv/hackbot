@@ -39,12 +39,12 @@ public class GameInterface {
 
     /** Moves the selected unit to a given tile. **/
     public boolean moveToTile(Coordinate coord) {
-        // Check if the unit's done
-        if (battle.selected.isDone() || battle.selected.moves < 1)
-            return false;
-
-        // Check if the destination is valid
-        if (!battle.canOccupy(battle.selected, coord))
+        // Make sure there is a selected unit on the current team that isn't
+        // done, with a valid destination.
+        if (battle.selected == null ||
+            battle.selected.getTeam() != battle.getTurn() ||
+            battle.selected.isDone() || battle.selected.moves < 1 ||
+            !battle.canOccupy(battle.selected, coord))
             return false;
 
         // Movement is successful. Make the move and return true.
@@ -64,16 +64,24 @@ public class GameInterface {
 
     /** Undo any movement made by the selected unit this turn. **/
     public boolean undo() {
-        if (battle.selected == null)
+        if (battle.selected == null ||
+            battle.selected.getTeam() != battle.getTurn())
             return false;
+
         return battle.selected.undo();
     }
 
     public boolean setDone() {
-        if (battle.selected.isDone())
+        if (battle.selected == null || battle.selected.isDone() ||
+            battle.selected.getTeam() != battle.getTurn())
             return false;
+
         battle.selected.setDone();
         return true;
+    }
+
+    public void passTurn() {
+        battle.passTurn();
     }
 
     /**

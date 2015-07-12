@@ -20,7 +20,13 @@ public abstract class Unit {
     protected int maxSize;
     protected Team team;
 
-    public static enum Team { PLAYER, COMPUTER }
+    public static enum Team { PLAYER, COMPUTER;
+        private static Team[] vals = values();
+        public Team next() {
+            return vals[(ordinal() + 1) % vals.length];
+        }
+    }
+
     public static enum TurnState { READY, MOVING, USING_ABILITY, DONE }
 
     // Set up universal initial properties.
