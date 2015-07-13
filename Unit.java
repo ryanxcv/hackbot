@@ -167,17 +167,17 @@ public abstract class Unit {
 
     public Unit copy() {
         if (this.getClass().equals(Hack.class))
-            return new Hack(sectors, moves, state, name, speed, maxSize, team,
-                            abilities);
+            return new Hack(sectorsCopy(), moves, state, name, speed, maxSize,
+                            team, abilities);
         else // if (this.getClass().equals(Sentinel.class))
-            return new Sentinel(sectors, moves, state, name, speed, maxSize,
-                                team, abilities);
+            return new Sentinel(sectorsCopy(), moves, state, name, speed,
+                                maxSize, team, abilities);
     }
 
     public LinkedList<Coordinate> sectorsCopy() {
         LinkedList<Coordinate> copy = new LinkedList<Coordinate>();
         for (Coordinate coord : sectors)
-            copy.add(coord.copy());
+            copy.add(coord);
         return copy;
     }
 

@@ -3,10 +3,14 @@ package hackbotutil;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * Coordinates are immutable, so we don't need to worry about giving uncloned
+ * references to the UI.
+ */
 public class Coordinate implements Comparable<Coordinate> {
 
-    private int column;
-    private int row;
+    public final int column;
+    public final int row;
 
     public Coordinate(int column, int row) {
         this.column = column;
@@ -54,10 +58,5 @@ public class Coordinate implements Comparable<Coordinate> {
         if (row != coord.getRow())
             return row - coord.getRow();
         return column - coord.getColumn();
-    }
-
-    /** Returns a copy of this Coordinate. **/
-    public Coordinate copy() {
-        return new Coordinate(column, row);
     }
 }
