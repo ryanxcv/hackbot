@@ -1,6 +1,8 @@
 package hackbotcore;
 
+import java.util.concurrent.Callable;
 import java.util.LinkedList;
+
 import hackbotutil.Coordinate;
 
 /**
@@ -19,6 +21,7 @@ public abstract class Unit {
     protected int speed;
     protected int maxSize;
     protected Team team;
+    private Ability ability;
 
     public static enum Team { PLAYER, COMPUTER;
         private static Team[] vals = values();
@@ -29,11 +32,35 @@ public abstract class Unit {
 
     public static enum TurnState { READY, MOVING, USING_ABILITY, DONE }
 
-    // Set up universal initial properties.
-    protected void init(Coordinate coord) {
+    public Unit(Coordinate coord, String name, int speed, int maxSize,
+                Team team, Ability ability) {
         sectors = new LinkedList<Coordinate>();
+        savedSectors = new LinkedList<Coordinate>();
         sectors.add(coord);
-        reset();
+        savedSectors.add(coord);
+        this.sectors = sectors;
+        init(speed, TurnState.READY, name, speed, maxSize, team, ability);
+    }
+
+    /** General constructor for creating a Unit when all fields are known. **/
+    public Unit(LinkedList<Coordinate> sectors, int moves, TurnState state,
+                String name, int speed, int maxSize, Team team,
+                Ability ability) {
+        this.sectors = sectors;
+        savedSectors = sectorsCopy();
+        init(moves, state, name, speed, maxSize, team, ability);
+
+    }
+
+    private void init(int moves, TurnState state, String name, int speed,
+                      int maxSize, Team team, Ability ability) {
+        this.moves   = moves;
+        this.state   = state;
+        this.name    = name;
+        this.speed   = speed;
+        this.maxSize = maxSize;
+        this.team    = team;
+        this.ability = ability;
     }
 
     protected void setDone() { state = TurnState.DONE; }
@@ -122,12 +149,13 @@ public abstract class Unit {
     }
 
     public Unit copy() {
-        Unit copy = null;
         if (this.getClass().equals(Hack.class))
-            copy = new Hack(new Coordinate(0, 0));
+            return new Hack(sectors, moves, state, name, speed, maxSize, team,
+                            ability);
         else // if (this.getClass().equals(Sentinel.class))
-            copy = new Sentinel(new Coordinate(0, 0));
-        copy.sectors = sectorsCopy();
+            return new Sentinel(sectors, moves, state, name, speed, maxSize,
+                                team, ability);
+        /*copy.sectors = sectorsCopy();
         copy.moves = moves;
         if (isDone())
             copy.setDone();
@@ -135,7 +163,7 @@ public abstract class Unit {
         copy.speed = speed;
         copy.maxSize = maxSize;
         copy.team = team;
-        return copy;
+        return copy;*/
     }
 
     public LinkedList<Coordinate> sectorsCopy() {
@@ -145,27 +173,39 @@ public abstract class Unit {
         return copy;
     }
 
+    public static abstract class Ability implements Callable {
+
+        private String name;
+        private String desc;
+
+        private Type type;
+
+        public static enum Type { ATTACK, STATUS }
+
+        public Type getType() { return type; }
+    }
+
     public static class Hack extends Unit {
 
         public Hack(Coordinate coord) {
-            name = "Hack";
-            speed = 2;
-            maxSize = 4;
-            team = Team.PLAYER;
-
-            init(coord);
+            super(coord, "Hack", 2, 4, Team.PLAYER, null);
+        }
+        public Hack(LinkedList<Coordinate> sectors, int moves, TurnState state,
+                    String name, int speed, int maxSize, Team team,
+                    Ability ability) {
+            super(sectors, moves, state, name, speed, maxSize, team, ability);
         }
     }
 
     public static class Sentinel extends Unit {
 
         public Sentinel(Coordinate coord) {
-            name = "Sentinel";
-            speed = 1;
-            maxSize = 4;
-            team = Team.COMPUTER;
-
-            init(coord);
+            super(coord, "Sentinel", 1, 4, Team.COMPUTER, null);
+        }
+        public Sentinel(LinkedList<Coordinate> sectors, int moves, TurnState state,
+                    String name, int speed, int maxSize, Team team,
+                    Ability ability) {
+            super(sectors, moves, state, name, speed, maxSize, team, ability);
         }
     }
 }
