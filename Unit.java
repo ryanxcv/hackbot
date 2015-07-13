@@ -130,6 +130,11 @@ public abstract class Unit {
             sectors.removeLast();
     }
 
+    protected void useAbility(Ability ability, Unit target) {
+        ability.use(target);
+        setDone();
+    }
+
     /**
      * Take a certain amount of damage. If the number of sectors is reduced to
      * zero, the return value is true, otherwise false.

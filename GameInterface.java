@@ -52,22 +52,35 @@ public class GameInterface {
         return true;
     }
 
-    /** Select an attack from among a unit's attacks. **/
-    public boolean selectAttack(int index) {
+    /** Select an ability from among a unit's abilities. **/
+    public boolean selectAbility(int index) {
         return false;
     }
 
-    /** Attack a given tile with the currently selected attack. **/
-    public boolean attackTile() {
-        return false;
+    /** Use the currently selected ability on a given tile. **/
+    public boolean useAbility(Coordinate coord) {
+        if (battle.selected == null || battle.selectedAbility == null ||
+            battle.selected.isDone() || battle.selected.sectors.contains(coord))
+            return false;
+        Unit target = battle.unitFromTile(coord);
+        if (target == null)
+            return false;
+        battle.useAbility(target);
+        return true;
+    }
+
+    public boolean canUndo() {
+        Unit u = battle.selected;
+        return u != null &&
+               u.getTeam() == battle.getTurn() &&
+               (u.getState() == Unit.TurnState.MOVING ||
+                u.getState() == Unit.TurnState.USING_ABILITY);
     }
 
     /** Undo any movement made by the selected unit this turn. **/
     public boolean undo() {
-        if (battle.selected == null ||
-            battle.selected.getTeam() != battle.getTurn())
+        if (!canUndo())
             return false;
-
         return battle.selected.undo();
     }
 
@@ -107,8 +120,8 @@ public class GameInterface {
         return battle.selected.copy();
     }
 
-    /** Returns the selected attack. **/
-    public void getSelectedAttack() {
+    /** Returns the selected ability. **/
+    public void getSelectedAbility() {
     }
 
     public int getWidth() {

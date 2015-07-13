@@ -4,6 +4,10 @@ import java.util.Set;
 
 import hackbotutil.*;
 
+/**
+ * Abilities are immutable, so we don't need to worry about giving uncloned
+ * references to the UI.
+ */
 public abstract class Ability {
 
     private final String name;
@@ -48,6 +52,6 @@ public abstract class Ability {
 
     public static class Cut extends Ability {
         public Cut() { super("Cut", "A basic attack"); }
-        public void use(Unit target) { return; }
+        public void use(Unit target) { target.takeDamage(2); }
     }
 }

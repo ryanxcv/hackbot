@@ -16,6 +16,7 @@ public class Battle {
     private int rows;
     protected LinkedList<Unit> units;
     protected Unit selected;
+    protected Ability selectedAbility;
 
     private Unit.Team turn;
 
@@ -59,6 +60,12 @@ public class Battle {
                 selected = u;
                 return;
             }
+    }
+
+    protected void useAbility(Unit target) {
+        assert selected        != null;
+        assert selectedAbility != null;
+        selected.useAbility(selectedAbility, target);
     }
 
     /**
