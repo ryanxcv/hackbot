@@ -23,6 +23,7 @@ public class SidePanel extends JPanel {
     private UI ui;
 
     private InfoPane info;
+    private JButton undoButton;
 
     public SidePanel(GameInterface iface, UI ui) {
         super();
@@ -41,13 +42,17 @@ public class SidePanel extends JPanel {
         info = new InfoPane("cat program.info");
         add(info);
 
-        JButton undoButton = new JButton("Undo");
+        undoButton = new JButton("Undo");
         undoButton.addActionListener(new UndoButtonListener());
         add(undoButton, BorderLayout.WEST);
     }
 
     protected void update() {
         info.update();
+        if (iface.canUndo())
+            undoButton.setEnabled(true);
+        else
+            undoButton.setEnabled(false);
     }
 
     private class InfoPane extends GameFrame {
