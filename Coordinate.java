@@ -13,13 +13,9 @@ public class Coordinate implements Comparable<Coordinate> {
         this.row    = row;
     }
 
-    public int getColumn() {
-        return column;
-    }
+    public int getColumn() { return column; }
 
-    public int getRow() {
-        return row;
-    }
+    public int getRow() { return row; }
 
     public boolean equals(Coordinate coord2) {
         return column == coord2.getColumn() &&

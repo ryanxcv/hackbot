@@ -26,9 +26,7 @@ public abstract class Unit {
 
     public static enum Team { PLAYER, COMPUTER;
         private static Team[] vals = values();
-        public Team next() {
-            return vals[(ordinal() + 1) % vals.length];
-        }
+        public Team next() { return vals[(ordinal() + 1) % vals.length]; }
     }
 
     public static enum TurnState { READY, MOVING, USING_ABILITY, DONE }
