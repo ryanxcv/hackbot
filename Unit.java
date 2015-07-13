@@ -132,6 +132,19 @@ public abstract class Unit {
             sectors.removeLast();
     }
 
+    /**
+     * Take a certain amount of damage. If the number of sectors is reduced to
+     * zero, the return value is true, otherwise false.
+     */
+    protected boolean takeDamage(int amount) {
+        for (int i = 0; i < amount; i++) {
+            if (sectors.size() == 0)
+                return true;
+            sectors.removeLast();
+        }
+        return false;
+    }
+
     public Coordinate getHead() { return sectors.getFirst(); }
 
     public int distance(int column, int row) {
