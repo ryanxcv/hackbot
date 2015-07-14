@@ -70,8 +70,10 @@ public class Battle {
         if (selected.useAbility(selectedAbility, target)) {
             // Remove any dead units from the grid.
             for (Unit u : units)
-                if (u.sectors.size() == 0)
+                if (u.sectors.size() == 0) {
                     units.remove(u);
+                    return;
+                }
         }
     }
 
