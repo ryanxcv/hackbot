@@ -39,9 +39,8 @@ public class Battle {
      * Runs at the start of each turn to set up units.
      */
     protected void beginTurn() {
-        for (Unit u : units) {
+        for (Unit u : units)
             u.reset();
-        }
     }
 
     protected void passTurn() {

@@ -138,6 +138,10 @@ public class GameInterface {
         return battle.selectedAbility;
     }
 
+    public Unit.Team getTurn() {
+        return battle.getTurn();
+    }
+
     public int getWidth() {
         return battle.getWidth();
     }

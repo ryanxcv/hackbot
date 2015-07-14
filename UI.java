@@ -21,6 +21,7 @@ import hackbotutil.Coordinate;
 public class UI extends JFrame {
 
     private GameInterface iface;
+    private AI ai;
 
     private TopBar top;
     private FieldDisplay field;
@@ -36,15 +37,12 @@ public class UI extends JFrame {
     private AudioClip sndTurn;
     private AudioClip sndUndo;
 
-    /** The player that is currently moving. **/
-    private Player turn;
-
     /** Set up the interface. **/
     public UI(GameInterface iface) {
         super("Hackbot");
         // Set up the main window.
         this.iface = iface;
-        turn = Player.HUMAN;
+        this.ai = new AI(this);
         //JFrame frame = new JFrame("Hackbot");
         getContentPane().setBackground(Color.BLACK);
 
@@ -142,6 +140,8 @@ public class UI extends JFrame {
         }
         iface.passTurn();
         update();
+        if (iface.getTurn() == Unit.Team.COMPUTER)
+            ai.conductTurn();
     }
 
     protected enum Player {
