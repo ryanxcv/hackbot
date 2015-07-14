@@ -1,6 +1,8 @@
 package hackbotcore;
 
 import java.util.LinkedList;
+import java.util.HashSet;
+import java.util.Set;
 
 import hackbotutil.Coordinate;
 
@@ -14,14 +16,14 @@ public class Battle {
 
     private int columns;
     private int rows;
-    protected LinkedList<Unit> units;
+    protected Set<Unit> units;
     protected Unit selected;
     protected Ability selectedAbility;
 
     private Unit.Team turn;
 
     public Battle(int columns, int rows) {
-        units = new LinkedList<Unit>();
+        units = new HashSet<Unit>();
         selected = null;
         turn = Unit.Team.PLAYER;
         this.columns = columns;
@@ -70,7 +72,7 @@ public class Battle {
             System.out.println("test");
             for (Unit u : units) {
                 if (u.sectors.size() == 0) {
-                    units.removeFirstOccurrence(u);
+                    units.remove(u);
                 }
             }
         }
