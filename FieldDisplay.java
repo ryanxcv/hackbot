@@ -29,14 +29,15 @@ class FieldDisplay extends JComponent {
     public static final int TILE_PIX_SIZE = 32;
 
     /** Images **/
-    private BufferedImage imgTile;
+    private BufferedImage imgAttack;
     private BufferedImage imgDone;
-    private BufferedImage imgSelect;
-    private BufferedImage imgMove;
-    private BufferedImage imgUp;
     private BufferedImage imgDown;
     private BufferedImage imgLeft;
+    private BufferedImage imgMove;
     private BufferedImage imgRight;
+    private BufferedImage imgSelect;
+    private BufferedImage imgTile;
+    private BufferedImage imgUp;
 
     // Fallback unit images
     private BufferedImage[] unknownUnit;
@@ -53,15 +54,16 @@ class FieldDisplay extends JComponent {
         int height = rows   * TILE_PIX_SIZE;
         setPreferredSize(new Dimension(width, height));
 
-        // Load images.
-        imgTile   = UI.getImage(     "tile.png");
+        // Load images.\
+        imgAttack = UI.getImage(   "attack.png");
         imgDone   = UI.getImage(     "done.png");
-        imgSelect = UI.getImage("selection.png");
-        imgMove   = UI.getImage(     "move.png");
-        imgUp     = UI.getImage(       "up.png");
         imgDown   = UI.getImage(     "down.png");
         imgLeft   = UI.getImage(     "left.png");
+        imgMove   = UI.getImage(     "move.png");
         imgRight  = UI.getImage(    "right.png");
+        imgSelect = UI.getImage("selection.png");
+        imgTile   = UI.getImage(     "tile.png");
+        imgUp     = UI.getImage(       "up.png");
 
         // Get unit images
         unitImages = new HashMap<Class, BufferedImage[]>();
@@ -113,8 +115,13 @@ class FieldDisplay extends JComponent {
         Unit selected = iface.getSelectedUnit();
         if (selected == null)
             return;
-
         drawTile(g, selected.getHead(), imgSelect);
+
+        // If there is a selected ability, draw its overlay.
+        if (selected.getState() == Unit.TurnState.USING_ABILITY) {
+            drawTiles(g, iface.getSelectedAbility().rangeSet(selected.getHead()), imgAttack);
+            return;
+        }
 
         // Draw the movement overlays.
         if (selected.isDone() || selected.getMoves() == 0)
@@ -190,7 +197,21 @@ class FieldDisplay extends JComponent {
                 return;
             }
 
-            if (selected.getMoves() > 0) {
+            if (selected.getState() == Unit.TurnState.USING_ABILITY) {
+                // Attacking
+                Ability ability = iface.getSelectedAbility();
+                if (ability.rangeSet(selected.getHead()).contains(coords)) {
+                    ui.tryAbility(coords);
+                } else if (selected.distance(coords) == 0) {
+                    // The user must have accidentally clicked the head.
+                    // Do nothing.
+                    return;
+                } else {
+                    // The user clicked far away from the unit.
+                    // Select what they clicked.
+                    ui.trySelect(coords);
+                }
+            } else if (selected.getMoves() > 0) {
                 // Movement
                 if (selected.distance(coords) == 1) {
                     if (clickedUnit == null || selected.contains(coords)) {

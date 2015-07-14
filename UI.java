@@ -109,6 +109,20 @@ public class UI extends JFrame {
         }
     }
 
+    public void trySelectAbility(int index) {
+        if (iface.selectAbility(index)) {
+            updateField();
+            updateSide();
+        }
+    }
+
+    public void tryAbility(Coordinate coord) {
+        if (!iface.useAbility(coord));
+            System.out.println("Ability use failed");
+        // Update the UI anyway, since the unit is now done.
+        update();
+    }
+
     protected void tryUndo() {
         if (iface.undo()) {
             sndUndo.play();

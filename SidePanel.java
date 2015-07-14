@@ -20,15 +20,15 @@ import hackbotcore.*;
 public class SidePanel extends JPanel {
 
     protected GameInterface iface;
-    private UI ui;
+    protected UI gameui;
 
     private InfoPane info;
     private JButton undoButton;
 
-    public SidePanel(GameInterface iface, UI ui) {
+    public SidePanel(GameInterface iface, UI gameui) {
         super();
-        this.iface = iface;
-        this.ui    = ui;
+        this.iface  = iface;
+        this.gameui = gameui;
 
         BoxLayout boxLayout1 = new BoxLayout(this, BoxLayout.Y_AXIS);
         setLayout(boxLayout1);
@@ -39,7 +39,7 @@ public class SidePanel extends JPanel {
         unitList.setPreferredSize(new Dimension(160, 20));
         add(unitList);
 
-        info = new InfoPane("cat program.info");
+        info = new InfoPane();
         add(info);
 
         undoButton = new JButton("Undo");
@@ -61,9 +61,10 @@ public class SidePanel extends JPanel {
         private JLabel maxSize;
         private JLabel size;
         private JLabel speed;
+        private JButton ability;
 
-        public InfoPane(String title) {
-            super(title);
+        public InfoPane() {
+            super("cat program.info");
 
             BoxLayout layout = new BoxLayout(getContentPane(), BoxLayout.Y_AXIS);
             setLayout(layout);
@@ -73,34 +74,46 @@ public class SidePanel extends JPanel {
             maxSize = new JLabel();
             size    = new JLabel();
             speed   = new JLabel();
+            ability = new JButton();
+            ability.addActionListener(new AbilityListener());
             add(name);
             add(maxSize);
             add(size);
             add(speed);
+            add(ability);
             pack();
         }
 
         protected void update() {
             Unit selected = iface.getSelectedUnit();
             if (selected == null) {
-                name.setText("");
-                maxSize.setText("");
-                size.setText("");
-                speed.setText("");
+                setComponentsVisible(false);
                 return;
             }
-
+            setComponentsVisible(true);
             name.setText(selected.getName());
             maxSize.setText("Max size: " + selected.getMaxSize());
             size.setText("Current size: " + selected.sectors.size());
             speed.setText("Moves: " + selected.getSpeed());
+            ability.setText(selected.abilities[0].name);
+        }
+
+        private void setComponentsVisible(boolean set) {
+            for (Component c : new Component[] { name, maxSize, size, speed, ability })
+                c.setVisible(set);
+        }
+
+        private class AbilityListener implements ActionListener {
+            public void actionPerformed(ActionEvent e) {
+                gameui.trySelectAbility(0);
+            }
         }
     }
 
     private class UndoButtonListener implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
-            ui.tryUndo();
+            gameui.tryUndo();
         }
     }
 }

@@ -25,7 +25,7 @@ public class GameInterface {
      * regarding the gamestate.
      */
 
-     /** Selects a given unit. Returns true if the selection changed. **/
+    /** Selects a given unit. Returns true if the selection changed. **/
     public boolean selectUnit(Coordinate coord) {
         Unit lastSelection = battle.selected;
         battle.selected = battle.unitFromTile(coord);
@@ -41,10 +41,10 @@ public class GameInterface {
     public boolean moveToTile(Coordinate coord) {
         // Make sure there is a selected unit on the current team that isn't
         // done, with a valid destination.
-        if (battle.selected == null ||
-            battle.selected.getTeam() != battle.getTurn() ||
-            battle.selected.isDone() || battle.selected.moves < 1 ||
-            !battle.canOccupy(battle.selected, coord))
+        Unit u = battle.selected;
+        if (u == null || u.getTeam() != battle.getTurn() ||
+            u.getState() == Unit.TurnState.USING_ABILITY ||
+            u.isDone() || u.moves < 1 || !battle.canOccupy(u, coord))
             return false;
 
         // Movement is successful. Make the move and return true.
@@ -54,17 +54,30 @@ public class GameInterface {
 
     /** Select an ability from among a unit's abilities. **/
     public boolean selectAbility(int index) {
-        return false;
+        // Make sure there is a selected unit that isn't
+        // done, with a valid ability.
+        if (index < 0) {
+            battle.selectedAbility = null;
+            return true;
+        }
+        Unit u = battle.selected;
+        if (u == null || u.isDone() || u.abilities == null || u.abilities.length <= index)
+            return false;
+        u.setState(Unit.TurnState.USING_ABILITY);
+        battle.selectedAbility = u.abilities[index];
+        return true;
     }
 
     /** Use the currently selected ability on a given tile. **/
     public boolean useAbility(Coordinate coord) {
         if (battle.selected == null || battle.selectedAbility == null ||
-            battle.selected.isDone() || battle.selected.sectors.contains(coord))
+            battle.selected.isDone())
             return false;
         Unit target = battle.unitFromTile(coord);
-        if (target == null)
+        if (target == null || battle.selected.contains(coord)) {
+            battle.selected.setDone();
             return false;
+        }
         battle.useAbility(target);
         return true;
     }
@@ -121,7 +134,8 @@ public class GameInterface {
     }
 
     /** Returns the selected ability. **/
-    public void getSelectedAbility() {
+    public Ability getSelectedAbility() {
+        return battle.selectedAbility;
     }
 
     public int getWidth() {

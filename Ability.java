@@ -10,10 +10,10 @@ import hackbotutil.*;
  */
 public abstract class Ability {
 
-    private final String name;
-    private final String desc;
-    private final Type type;
-    private final int range;
+    public final String name;
+    public final String desc;
+    public final Type type;
+    public final int range;
 
     public static enum Type { ATTACK, STATUS }
 
@@ -44,14 +44,14 @@ public abstract class Ability {
 
     public Type getType() { return type; }
 
-    public abstract void use(Unit target);
+    public abstract boolean use(Unit target);
 
     public Set<Coordinate> rangeSet(Coordinate coord) {
-        return coord.distanceSet(range);
+        return coord.distanceSet(range, 0);
     }
 
     public static class Cut extends Ability {
         public Cut() { super("Cut", "A basic attack"); }
-        public void use(Unit target) { target.takeDamage(2); }
+        public boolean use(Unit target) { return target.takeDamage(2); }
     }
 }

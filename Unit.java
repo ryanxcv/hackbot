@@ -22,7 +22,7 @@ public abstract class Unit {
     protected int speed;
     protected int maxSize;
     protected Team team;
-    private Ability[] abilities;
+    public Ability[] abilities;
 
     public static enum Team { PLAYER, COMPUTER;
         private static Team[] vals = values();
@@ -65,6 +65,7 @@ public abstract class Unit {
     protected void setDone() { state = TurnState.DONE; }
     public boolean isDone() { return state == TurnState.DONE; }
     public TurnState getState() { return state; }
+    public void setState(TurnState state) { this.state = state; }
 
     public int getMoves() { return moves; }
     public String getName() { return name; }
@@ -130,9 +131,10 @@ public abstract class Unit {
             sectors.removeLast();
     }
 
-    protected void useAbility(Ability ability, Unit target) {
-        ability.use(target);
+    protected boolean useAbility(Ability ability, Unit target) {
+        boolean result = ability.use(target);
         setDone();
+        return result;
     }
 
     /**
@@ -141,9 +143,9 @@ public abstract class Unit {
      */
     protected boolean takeDamage(int amount) {
         for (int i = 0; i < amount; i++) {
+            sectors.removeLast();
             if (sectors.size() == 0)
                 return true;
-            sectors.removeLast();
         }
         return false;
     }
@@ -184,7 +186,7 @@ public abstract class Unit {
     public static class Hack extends Unit {
 
         public Hack(Coordinate coord) {
-            super(coord, "Hack", 2, 4, Team.PLAYER, null);
+            super(coord, "Hack", 2, 4, Team.PLAYER, new Ability[] { new Cut() });
         }
         public Hack(LinkedList<Coordinate> sectors, int moves, TurnState state,
                     String name, int speed, int maxSize, Team team,
@@ -202,8 +204,7 @@ public abstract class Unit {
         public Sentinel(LinkedList<Coordinate> sectors, int moves, TurnState state,
                     String name, int speed, int maxSize, Team team,
                     Ability[] abilities) {
-            super(sectors, moves, state, name, speed, maxSize, team,
-                  new Ability[] { new Cut() });
+            super(sectors, moves, state, name, speed, maxSize, team, abilities);
         }
     }
 }
