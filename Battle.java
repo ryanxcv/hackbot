@@ -69,12 +69,9 @@ public class Battle {
         assert selectedAbility != null;
         if (selected.useAbility(selectedAbility, target)) {
             // Remove any dead units from the grid.
-            System.out.println("test");
-            for (Unit u : units) {
-                if (u.sectors.size() == 0) {
+            for (Unit u : units)
+                if (u.sectors.size() == 0)
                     units.remove(u);
-                }
-            }
         }
     }
 

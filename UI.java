@@ -117,7 +117,7 @@ public class UI extends JFrame {
     }
 
     public void tryAbility(Coordinate coord) {
-        if (!iface.useAbility(coord));
+        if (!iface.useAbility(coord))
             System.out.println("Ability use failed");
         // Update the UI anyway, since the unit is now done.
         update();
