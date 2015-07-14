@@ -119,7 +119,7 @@ public class UI extends JFrame {
 
     protected void passTurn() {
         sndTurn.play();
-        getGraphics().drawImage(imgTurn, 100, 100, this);
+        field.getGraphics().drawImage(imgTurn, 100, 100, field);
         //repaint();
         try {
             Thread.sleep(1000);
