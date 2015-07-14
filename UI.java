@@ -144,10 +144,6 @@ public class UI extends JFrame {
             ai.conductTurn();
     }
 
-    protected enum Player {
-        HUMAN, COMPUTER
-    }
-
     protected static BufferedImage getImage(String filename) {
         try {
             return ImageIO.read(new File("img/" + filename));
