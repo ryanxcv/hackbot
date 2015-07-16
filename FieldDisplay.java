@@ -20,7 +20,7 @@ import hackbotutil.Coordinate;
 class FieldDisplay extends JComponent {
 
     private GameInterface iface;
-    private UI ui;
+    private UI gameui;
 
     /** The images to use for each unit. **/
     private Map<Class, BufferedImage[]> unitImages;
@@ -43,9 +43,9 @@ class FieldDisplay extends JComponent {
     private BufferedImage[] unknownUnit;
 
     /** Class constructor. **/
-    public FieldDisplay(GameInterface iface, UI ui) {
-        this.iface = iface;
-        this.ui    = ui;
+    public FieldDisplay(GameInterface iface, UI gameui) {
+        this.iface  = iface;
+        this.gameui = gameui;
 
         // Compute the necessary field size.
         int columns = iface.getWidth();
@@ -183,6 +183,8 @@ class FieldDisplay extends JComponent {
         }
 
         public void mouseClicked(MouseEvent e) {
+            if (!gameui.isReady())
+                return;
             // Get the coords that were clicked.
             Coordinate coords = pixelToCoords(e.getX(), e.getY());
             // Ignore clicks outside of the playing field
@@ -193,7 +195,7 @@ class FieldDisplay extends JComponent {
 
             // Program selection
             if (selected == null) {
-                ui.trySelect(coords);
+                gameui.trySelect(coords);
                 return;
             }
 
@@ -201,7 +203,7 @@ class FieldDisplay extends JComponent {
                 // Attacking
                 Ability ability = iface.getSelectedAbility();
                 if (ability.rangeSet(selected.getHead()).contains(coords)) {
-                    ui.tryAbility(coords);
+                    gameui.tryAbility(coords);
                 } else if (selected.distance(coords) == 0) {
                     // The user must have accidentally clicked the head.
                     // Do nothing.
@@ -209,22 +211,22 @@ class FieldDisplay extends JComponent {
                 } else {
                     // The user clicked far away from the unit.
                     // Select what they clicked.
-                    ui.trySelect(coords);
+                    gameui.trySelect(coords);
                 }
             } else if (selected.getMoves() > 0) {
                 // Movement
                 if (selected.distance(coords) == 1) {
                     if (clickedUnit == null || selected.contains(coords)) {
-                        ui.tryMove(coords);
+                        gameui.tryMove(coords);
                     } else {
-                        ui.trySelect(coords);
+                        gameui.trySelect(coords);
                     }
                 // Deselection
                 } else if (selected.distance(coords) > 1) {
-                    ui.trySelect(coords);
+                    gameui.trySelect(coords);
                 }
             } else {
-                ui.trySelect(coords);
+                gameui.trySelect(coords);
             }
 
         }

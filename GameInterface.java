@@ -2,7 +2,7 @@ package hackbotcore;
 
 import java.util.LinkedList;
 
-import hackbotutil.Coordinate;
+import hackbotutil.*;
 
 /**
  * Allows for safe engine-UI interaction by providing public helper methods.
@@ -38,11 +38,26 @@ public class GameInterface {
     }
 
     /** Moves the selected unit to a given tile. **/
-    public boolean moveToTile(Coordinate coord) {
+    public boolean move(Coordinate coord) {
         // Make sure there is a selected unit on the current team that isn't
         // done, with a valid destination.
         Unit u = battle.selected;
         if (u == null || u.getTeam() != battle.getTurn() ||
+            u.getState() == Unit.TurnState.USING_ABILITY ||
+            u.isDone() || u.moves < 1 || !battle.canOccupy(u, coord))
+            return false;
+
+        // Movement is successful. Make the move and return true.
+        battle.selected.move(coord);
+        return true;
+    }
+    public boolean move(Direction dir) {
+        Unit u = battle.selected;
+        if (u == null)
+            return false;
+        Coordinate coord = u.getHead().shift(dir);
+        System.out.println("Moving to coordinate " + coord.getColumn() + ", " + coord.getRow());
+        if (u.getTeam() != battle.getTurn() ||
             u.getState() == Unit.TurnState.USING_ABILITY ||
             u.isDone() || u.moves < 1 || !battle.canOccupy(u, coord))
             return false;
@@ -78,7 +93,7 @@ public class GameInterface {
             battle.selected.setDone();
             return false;
         }
-        battle.useAbility(target);
+        battle.useAbility(coord);
         return true;
     }
 

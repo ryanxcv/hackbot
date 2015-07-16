@@ -54,6 +54,22 @@ public class Coordinate implements Comparable<Coordinate> {
         return result;
     }
 
+    public Coordinate offset(Coordinate coord) {
+        return new Coordinate(coord.getColumn() - column, coord.getRow() - row);
+    }
+
+    public Coordinate shift(Direction dir) {
+        if (dir == Direction.UP)
+            return new Coordinate(column, row - 1);
+        if (dir == Direction.DOWN)
+            return new Coordinate(column, row + 1);
+        if (dir == Direction.LEFT)
+            return new Coordinate(column - 1, row);
+        if (dir == Direction.RIGHT)
+            return new Coordinate(column + 1, row);
+        return null;
+    }
+
     public int compareTo(Coordinate coord) {
         if (row != coord.getRow())
             return row - coord.getRow();

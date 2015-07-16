@@ -63,9 +63,10 @@ public class Battle {
             }
     }
 
-    protected void useAbility(Unit target) {
+    protected void useAbility(Coordinate coord) {
         assert selected        != null;
         assert selectedAbility != null;
+        Unit target = unitFromTile(coord);
         if (selected.useAbility(selectedAbility, target)) {
             // Remove any dead units from the grid.
             for (Unit u : units)

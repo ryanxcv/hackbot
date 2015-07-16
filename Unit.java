@@ -155,9 +155,11 @@ public abstract class Unit {
     public int distance(int column, int row) {
         return getHead().distance(column, row);
     }
-
     public int distance(Coordinate coord) {
         return getHead().distance(coord);
+    }
+    public int distance(Unit u) {
+        return getHead().distance(u.getHead());
     }
 
     public boolean contains(Coordinate coord) {

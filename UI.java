@@ -22,6 +22,7 @@ public class UI extends JFrame {
 
     private GameInterface iface;
     private AI ai;
+    private boolean inputready;
 
     private TopBar top;
     private FieldDisplay field;
@@ -42,7 +43,8 @@ public class UI extends JFrame {
         super("Hackbot");
         // Set up the main window.
         this.iface = iface;
-        this.ai = new AI(this);
+        this.ai = new AI(this, iface);
+        inputready = true;
         //JFrame frame = new JFrame("Hackbot");
         getContentPane().setBackground(Color.BLACK);
 
@@ -74,6 +76,9 @@ public class UI extends JFrame {
         setVisible(true);
     }
 
+    protected boolean isReady() { return inputready; }
+    protected void setReady(boolean set) { inputready = set; }
+
     protected void update() {
         repaint();
         field.repaint();
@@ -92,13 +97,12 @@ public class UI extends JFrame {
         if (iface.selectUnit(coord)) {
             if (iface.getSelectedUnit() != null)
                 sndSelect.play();
-            updateField();
-            updateSide();
+            update();
         }
     }
 
     public void tryMove(Coordinate coord) {
-        if (iface.moveToTile(coord)) {
+        if (iface.move(coord)) {
             sndMove.play();
             updateField();
             updateSide();
@@ -132,16 +136,24 @@ public class UI extends JFrame {
     protected void passTurn() {
         sndTurn.play();
         field.getGraphics().drawImage(imgTurn, 100, 100, field);
-        //repaint();
+        pause();
+        iface.passTurn();
+        update();
+        if (iface.getTurn() == Unit.Team.COMPUTER)
+            ai.start();
+    }
+
+    /** Must be called from another thread. **/
+    protected void pause() {
+        boolean temp = inputready;
+        inputready = false;
+        update();
         try {
             Thread.sleep(1000);
         } catch (Exception e) {
             System.out.println(e);
         }
-        iface.passTurn();
-        update();
-        if (iface.getTurn() == Unit.Team.COMPUTER)
-            ai.conductTurn();
+        inputready = temp;
     }
 
     protected static BufferedImage getImage(String filename) {
