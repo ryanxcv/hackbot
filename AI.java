@@ -38,7 +38,8 @@ public class AI extends Thread {
             if (selected == null || selected.isDone()) {
                 for (Unit u : computerUnits)
                     if (!u.isDone()) {
-                        assert iface.selectUnit(u.getHead());
+                        boolean temp = iface.selectUnit(u.getHead());
+                        assert temp;
                         break;
                     }
                 selected = iface.getSelectedUnit();

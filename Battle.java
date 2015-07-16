@@ -92,12 +92,14 @@ public class Battle {
             // Remove any dead units from the grid.
             for (Unit u : playerUnits)
                 if (u.sectors.size() == 0) {
-                    assert playerUnits.remove(u);
+                    boolean temp = playerUnits.remove(u);
+                    assert temp;
                     break;
                 }
             for (Unit u : computerUnits)
                 if (u.sectors.size() == 0) {
-                    assert computerUnits.remove(u);
+                    boolean temp = computerUnits.remove(u);
+                    assert temp;
                     break;
                 }
         }
