@@ -69,8 +69,8 @@ public class SidePanel extends JPanel {
             JPanel northeast = new JPanel();
             northeast.setLayout(new BoxLayout(northeast, BoxLayout.Y_AXIS));
             northeast.add(Box.createVerticalGlue());
-            north.add(northeast, BorderLayout.EAST);
             north.add(img, BorderLayout.WEST);
+            north.add(northeast, BorderLayout.EAST);
             northeast.add(name);
             northeast.add(maxSize);
             northeast.add(size);
@@ -105,6 +105,7 @@ public class SidePanel extends JPanel {
                 return;
             }
             setComponentsVisible(true);
+            img.setImage(selected.imgHead);
             name.setText(selected.getName());
             maxSize.setText("Max size: " + selected.getMaxSize());
             size.setText("Current size: " + selected.sectors.size());
@@ -114,7 +115,7 @@ public class SidePanel extends JPanel {
 
         private void setComponentsVisible(boolean set) {
             for (Component c : new Component[]
-                               { name, maxSize, size, speed, ability, cancel })
+                               { img, name, maxSize, size, speed, ability, cancel })
                 c.setVisible(set);
         }
     }
@@ -122,6 +123,13 @@ public class SidePanel extends JPanel {
     public class ImagePanel extends JPanel {
 
         private BufferedImage image;
+
+        public ImagePanel() {
+            setOpaque(false);
+            setPreferredSize(new Dimension(32, 32));
+        }
+
+        public void setImage(BufferedImage image) { this.image = image; }
 
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
