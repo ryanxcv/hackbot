@@ -73,6 +73,8 @@ public class GameInterface {
         // done, with a valid ability.
         if (index < 0) {
             battle.selectedAbility = null;
+            if (battle.selected != null)
+                battle.selected.setState(Unit.TurnState.MOVING);
             return true;
         }
         Unit u = battle.selected;
@@ -85,12 +87,14 @@ public class GameInterface {
 
     /** Use the currently selected ability on a given tile. **/
     public boolean useAbility(Coordinate coord) {
-        if (battle.selected == null || battle.selectedAbility == null ||
-            battle.selected.isDone())
+        Unit u = battle.selected;
+        if (u == null || battle.selectedAbility == null || u.isDone())
+            return false;
+        if (u.getTeam() != battle.getTurn())
             return false;
         Unit target = battle.unitFromTile(coord);
-        if (target == null || battle.selected.contains(coord)) {
-            battle.selected.setDone();
+        if (target == null || u.contains(coord)) {
+            u.setDone();
             return false;
         }
         battle.useAbility(coord);

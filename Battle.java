@@ -84,8 +84,13 @@ public class Battle {
      */
     protected boolean canOccupy(Unit unit, Coordinate coord) {
         // Check if the program already occupies that tile.
-        if (unit.sectors.contains(coord))
+        if (unit.contains(coord))
             return true;
+
+        // Check if any other programs occupy that tile.
+        for (Unit u : units)
+            if (u.contains(coord))
+            	return false;
 
         // Otherwise, it should be occupable.
         return true;

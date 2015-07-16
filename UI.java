@@ -21,7 +21,6 @@ import hackbotutil.Coordinate;
 public class UI extends JFrame {
 
     private GameInterface iface;
-    private AI ai;
     private boolean inputready;
 
     private TopBar top;
@@ -43,7 +42,6 @@ public class UI extends JFrame {
         super("Hackbot");
         // Set up the main window.
         this.iface = iface;
-        this.ai = new AI(this, iface);
         inputready = true;
         //JFrame frame = new JFrame("Hackbot");
         getContentPane().setBackground(Color.BLACK);
@@ -140,7 +138,7 @@ public class UI extends JFrame {
         iface.passTurn();
         update();
         if (iface.getTurn() == Unit.Team.COMPUTER)
-            ai.start();
+            (new AI(this, iface)).start();
     }
 
     /** Must be called from another thread. **/
