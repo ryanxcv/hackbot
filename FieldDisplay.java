@@ -4,8 +4,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.awt.Image;
-import java.awt.Graphics;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,22 +17,22 @@ import hackbotutil.Coordinate;
 /** An class derived from JComponent that displays a custom image. **/
 class FieldDisplay extends JComponent {
 
-    private GameInterface iface;
-    private UI gameui;
+    private final GameInterface iface;
+    private final UI gameui;
 
     /** The edge length of a tile in pixels. **/
     public static final int TILE_PIX_SIZE = 32;
 
     /** Images **/
-    private BufferedImage imgAttack;
-    private BufferedImage imgDone;
-    private BufferedImage imgDown;
-    private BufferedImage imgLeft;
-    private BufferedImage imgMove;
-    private BufferedImage imgRight;
-    private BufferedImage imgSelect;
-    private BufferedImage imgTile;
-    private BufferedImage imgUp;
+    private final BufferedImage imgAttack;
+    private final BufferedImage imgDone;
+    private final BufferedImage imgDown;
+    private final BufferedImage imgLeft;
+    private final BufferedImage imgMove;
+    private final BufferedImage imgRight;
+    private final BufferedImage imgSelect;
+    private final BufferedImage imgTile;
+    private final BufferedImage imgUp;
 
     /** Class constructor. **/
     public FieldDisplay(GameInterface iface, UI gameui) {
@@ -48,7 +46,7 @@ class FieldDisplay extends JComponent {
         int height = rows   * TILE_PIX_SIZE;
         setPreferredSize(new Dimension(width, height));
 
-        // Load images.\
+        // Load images.
         imgAttack = UI.getImage(   "attack.png");
         imgDone   = UI.getImage(     "done.png");
         imgDown   = UI.getImage(     "down.png");
