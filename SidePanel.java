@@ -1,17 +1,10 @@
 package hackbotui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import java.awt.image.BufferedImage;
+import javax.swing.*;
 
 import java.applet.AudioClip;
 
@@ -19,19 +12,18 @@ import hackbotcore.*;
 
 public class SidePanel extends JPanel {
 
-    protected GameInterface iface;
-    protected UI gameui;
+    protected final GameInterface iface;
+    protected final UI gameui;
 
     private InfoPane info;
     private JButton undoButton;
 
-    public SidePanel(GameInterface iface, UI gameui) {
+    public SidePanel(GameInterface iface, UI ui) {
         super();
         this.iface  = iface;
-        this.gameui = gameui;
+        this.gameui = ui;
 
-        BoxLayout boxLayout1 = new BoxLayout(this, BoxLayout.Y_AXIS);
-        setLayout(boxLayout1);
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(Box.createVerticalGlue());
 
         // Add components.
@@ -43,7 +35,11 @@ public class SidePanel extends JPanel {
         add(info);
 
         undoButton = new JButton("Undo");
-        undoButton.addActionListener(new UndoButtonListener());
+        undoButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                gameui.tryUndo();
+            }
+        });
         add(undoButton, BorderLayout.WEST);
     }
 
@@ -57,30 +53,46 @@ public class SidePanel extends JPanel {
 
     private class InfoPane extends GameFrame {
 
-        private JLabel name;
-        private JLabel maxSize;
-        private JLabel size;
-        private JLabel speed;
-        private JButton ability;
+        private JLabel  name = new JLabel();
+        private JLabel  maxSize = new JLabel();
+        private JLabel  size    = new JLabel();
+        private JLabel  speed   = new JLabel();
+        private JButton ability = new JButton();
+        private JButton cancel  = new JButton("Cancel");
 
         public InfoPane() {
             super("cat program.info");
 
-            BoxLayout layout = new BoxLayout(getContentPane(), BoxLayout.Y_AXIS);
-            setLayout(layout);
-            add(Box.createVerticalGlue());
+            // Set up the program details panel.
+            JPanel north = new JPanel();
+            JPanel northeast = new JPanel();
+            northeast.setLayout(new BoxLayout(northeast, BoxLayout.Y_AXIS));
+            northeast.add(Box.createVerticalGlue());
+            north.add(northeast, BorderLayout.EAST);
+            northeast.add(name);
+            northeast.add(maxSize);
+            northeast.add(size);
+            northeast.add(speed);
+            add(north, BorderLayout.NORTH);
 
-            name    = new JLabel();
-            maxSize = new JLabel();
-            size    = new JLabel();
-            speed   = new JLabel();
-            ability = new JButton();
-            ability.addActionListener(new AbilityListener());
-            add(name);
-            add(maxSize);
-            add(size);
-            add(speed);
-            add(ability);
+            // Set up the action panel.
+            JPanel center = new JPanel();
+            center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
+            ability.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    gameui.trySelectAbility(0);
+                }
+            });
+            cancel.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    gameui.trySelectAbility(-1);
+                }
+            });
+            center.add(ability);
+            center.add(cancel);
+            add(center, BorderLayout.CENTER);
+
+            setComponentsVisible(false);
             pack();
         }
 
@@ -99,21 +111,19 @@ public class SidePanel extends JPanel {
         }
 
         private void setComponentsVisible(boolean set) {
-            for (Component c : new Component[] { name, maxSize, size, speed, ability })
+            for (Component c : new Component[]
+                               { name, maxSize, size, speed, ability, cancel })
                 c.setVisible(set);
-        }
-
-        private class AbilityListener implements ActionListener {
-            public void actionPerformed(ActionEvent e) {
-                gameui.trySelectAbility(0);
-            }
         }
     }
 
-    private class UndoButtonListener implements ActionListener {
+    public class ImagePanel extends JPanel {
 
-        public void actionPerformed(ActionEvent e) {
-            gameui.tryUndo();
+        private BufferedImage image;
+
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(image, 0, 0, null);
         }
     }
 }
