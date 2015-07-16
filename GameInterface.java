@@ -90,6 +90,8 @@ public class GameInterface {
         Unit u = battle.selected;
         if (u == null || battle.selectedAbility == null || u.isDone())
             return false;
+        if (u.distance(coord) > battle.selectedAbility.range)
+            return false;
         if (u.getTeam() != battle.getTurn())
             return false;
         Unit target = battle.unitFromTile(coord);

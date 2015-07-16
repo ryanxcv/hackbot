@@ -13,7 +13,7 @@ import java.applet.AudioClip;
 import java.net.URL;
 
 import hackbotcore.*;
-import hackbotutil.Coordinate;
+import hackbotutil.*;
 
 /**
  * The window that contains all of the game's UI elements.
@@ -102,21 +102,35 @@ public class UI extends JFrame {
         }
     }
 
-    public void tryMove(Coordinate coord) {
+    public boolean tryMove(Coordinate coord) {
         if (iface.move(coord)) {
             sndMove.play();
             updateField();
             updateSide();
+            return true;
         } else {
             System.out.println("Movement failed");
+            return false;
         }
     }
+    public boolean tryMove(Direction dir) {
+        if (iface.move(dir)) {
+            sndMove.play();
+            updateField();
+            updateSide();
+            return true;
+        }
+        System.out.println("Movement failed");
+        return false;
+    }
 
-    public void trySelectAbility(int index) {
+    public boolean trySelectAbility(int index) {
         if (iface.selectAbility(index)) {
             updateField();
             updateSide();
+            return true;
         }
+        return false;
     }
 
     public void tryAbility(Coordinate coord) {
@@ -154,7 +168,7 @@ public class UI extends JFrame {
         inputready = false;
         //update();
         try {
-            current.sleep(1000);
+            current.sleep(500);
         } catch (Exception e) {
             System.out.println(e);
         }
