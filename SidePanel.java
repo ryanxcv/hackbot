@@ -22,6 +22,7 @@ public class SidePanel extends JPanel {
         super();
         this.iface  = iface;
         this.gameui = ui;
+        setOpaque(false);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(Box.createVerticalGlue());
@@ -41,6 +42,7 @@ public class SidePanel extends JPanel {
             }
         });
         add(undoButton, BorderLayout.WEST);
+        update();
     }
 
     protected void update() {

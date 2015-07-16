@@ -4,10 +4,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import javax.swing.JComponent;
+import java.util.*;
+import javax.swing.*;
 
 import java.applet.AudioClip;
 
@@ -15,7 +13,7 @@ import hackbotcore.*;
 import hackbotutil.Coordinate;
 
 /** An class derived from JComponent that displays a custom image. **/
-class FieldDisplay extends JComponent {
+class FieldDisplay extends JPanel {
 
     private final GameInterface iface;
     private final UI gameui;
@@ -38,6 +36,7 @@ class FieldDisplay extends JComponent {
     public FieldDisplay(GameInterface iface, UI gameui) {
         this.iface  = iface;
         this.gameui = gameui;
+        setOpaque(false);
 
         // Compute the necessary field size.
         int columns = iface.getWidth();
