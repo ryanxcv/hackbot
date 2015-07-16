@@ -54,7 +54,6 @@ public class AI extends Thread {
         iface.selectUnit(unit.getHead());
         // Get the closest enemy.
         Unit target = closestEnemy(unit);
-        assert target != null;
         // Move toward it.
         int moves = unit.getMoves();
         Coordinate offset = unit.getHead().offset(target.getHead());
