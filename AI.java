@@ -23,12 +23,12 @@ public class AI extends Thread {
 
 
     public void run() {
-        LinkedList<Unit> units;
+        LinkedList<Unit> computerUnits;
         Unit selected;
         while (true) {
-            units = iface.getUnitList();
+            computerUnits = iface.getComputerUnitList();
             // If every unit is done, pass turn.
-            if (allDone(units))
+            if (allDone(computerUnits))
                 break;
             // If nothing is selected, select something.
             selected = iface.getSelectedUnit();
@@ -40,7 +40,6 @@ public class AI extends Thread {
             else
                 break;
         }
-        gameui.setReady(true);
         gameui.passTurn();
     }
 
@@ -54,7 +53,7 @@ public class AI extends Thread {
     public void makeMove(Unit unit) {
         iface.selectUnit(unit.getHead());
         // Get the closest enemy.
-        Unit target = closest(unit);
+        Unit target = closestEnemy(unit);
         assert target != null;
         // Move toward it.
         int moves = unit.getMoves();
@@ -75,15 +74,14 @@ public class AI extends Thread {
         gameui.pause();
     }
 
-    private Unit closest(Unit unit) {
+    private Unit closestEnemy(Unit unit) {
         int max = Integer.MAX_VALUE;
         Unit result = null;
-        for (Unit u : iface.getUnitList())
-            if (u.getTeam() == Unit.Team.PLAYER)
-                if (unit.distance(u) < max) {
-                    max = unit.distance(u);
-                    result = u;
-                }
+        for (Unit u : iface.getPlayerUnitList())
+            if (unit.distance(u) < max) {
+                max = unit.distance(u);
+                result = u;
+            }
         return result;
     }
 }

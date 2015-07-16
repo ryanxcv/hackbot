@@ -23,6 +23,8 @@ public class UI extends JFrame {
     private GameInterface iface;
     private boolean inputready;
 
+    private Thread current;
+
     private TopBar top;
     private FieldDisplay field;
     private SidePanel side;
@@ -40,6 +42,7 @@ public class UI extends JFrame {
     /** Set up the interface. **/
     public UI(GameInterface iface) {
         super("Hackbot");
+        current = Thread.currentThread();
         // Set up the main window.
         this.iface = iface;
         inputready = true;
@@ -137,17 +140,21 @@ public class UI extends JFrame {
         pause();
         iface.passTurn();
         update();
-        if (iface.getTurn() == Unit.Team.COMPUTER)
+        if (iface.getTurn() == Unit.Team.COMPUTER) {
+            setReady(false);
             (new AI(this, iface)).start();
+        } else {
+            setReady(true);
+        }
     }
 
     /** Must be called from another thread. **/
     protected void pause() {
         boolean temp = inputready;
         inputready = false;
-        update();
+        //update();
         try {
-            Thread.sleep(1000);
+            current.sleep(1000);
         } catch (Exception e) {
             System.out.println(e);
         }

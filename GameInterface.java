@@ -138,9 +138,21 @@ public class GameInterface {
      */
 
     /** Returns the list of units currently on the board. **/
-    public LinkedList<Unit> getUnitList() {
+    public LinkedList<Unit> getPlayerUnitList() {
         LinkedList<Unit> result = new LinkedList<Unit>();
-        for (Unit u : battle.units)
+        for (Unit u : battle.playerUnits)
+            result.add(u.copy());
+        return result;
+    }
+    public LinkedList<Unit> getComputerUnitList() {
+        LinkedList<Unit> result = new LinkedList<Unit>();
+        for (Unit u : battle.computerUnits)
+            result.add(u.copy());
+        return result;
+    }
+    public LinkedList<Unit> getAllUnitList() {
+        LinkedList<Unit> result = new LinkedList<Unit>();
+        for (Unit u : battle.allUnits())
             result.add(u.copy());
         return result;
     }

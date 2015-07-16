@@ -14,16 +14,18 @@ import hackbotutil.Coordinate;
  */
 public class Battle {
 
-    private int columns;
-    private int rows;
-    protected Set<Unit> units;
+    private final int columns;
+    private final int rows;
+    protected final Set<Unit> playerUnits;
+    protected final Set<Unit> computerUnits;
     protected Unit selected;
     protected Ability selectedAbility;
 
     private Unit.Team turn;
 
     public Battle(int columns, int rows) {
-        units = new HashSet<Unit>();
+        playerUnits   = new HashSet<Unit>();
+        computerUnits = new HashSet<Unit>();
         selected = null;
         turn = Unit.Team.PLAYER;
         this.columns = columns;
@@ -39,7 +41,7 @@ public class Battle {
      * Runs at the start of each turn to set up units.
      */
     protected void beginTurn() {
-        for (Unit u : units)
+        for (Unit u : allUnits())
             u.reset();
     }
 
@@ -48,19 +50,38 @@ public class Battle {
         beginTurn();
     }
 
+    protected Set<Unit> allUnits() {
+        HashSet<Unit> result = new HashSet<Unit>(playerUnits);
+        result.addAll(computerUnits);
+        return result;
+    }
+
     private boolean allUnitsDone() {
-        for (Unit u : units)
-            if (u.team == turn && !u.isDone())
-                return false;
-        return true;
+        if (turn == Unit.Team.PLAYER) {
+            for (Unit u : playerUnits)
+                if (!u.isDone())
+                    return false;
+            return true;
+        } else {
+            for (Unit u : computerUnits)
+                if (!u.isDone())
+                    return false;
+            return true;
+        }
     }
 
     protected void selectFirst() {
-        for (Unit u : units)
-            if (u.team == turn) {
+        if (turn == Unit.Team.PLAYER) {
+            for (Unit u : playerUnits) {
                 selected = u;
                 return;
             }
+        } else {
+            for (Unit u : computerUnits) {
+                selected = u;
+                return;
+            }
+        }
     }
 
     protected void useAbility(Coordinate coord) {
@@ -69,10 +90,15 @@ public class Battle {
         Unit target = unitFromTile(coord);
         if (selected.useAbility(selectedAbility, target)) {
             // Remove any dead units from the grid.
-            for (Unit u : units)
+            for (Unit u : playerUnits)
                 if (u.sectors.size() == 0) {
-                    units.remove(u);
-                    return;
+                    playerUnits.remove(u);
+                    break;
+                }
+            for (Unit u : computerUnits)
+                if (u.sectors.size() == 0) {
+                    playerUnits.remove(u);
+                    break;
                 }
         }
     }
@@ -88,7 +114,7 @@ public class Battle {
             return true;
 
         // Check if any other programs occupy that tile.
-        for (Unit u : units)
+        for (Unit u : allUnits())
             if (u.contains(coord))
             	return false;
 
@@ -96,14 +122,15 @@ public class Battle {
         return true;
     }
 
-    public void addUnit(Unit unit) { units.add(unit); }
+    public void addPlayerUnit(  Unit unit)   { playerUnits.add(unit); }
+    public void addComputerUnit(Unit unit) { computerUnits.add(unit); }
 
     /**
      * Get the unit (if any) that occupies a chosen tile.
      */
     public Unit unitFromTile(Coordinate coord) {
         // Iterate through all the programs.
-        for (Unit u : units)
+        for (Unit u : allUnits())
             for (Coordinate c : u.sectors)
                 if (coord.equals(c))
                     return u;

@@ -69,7 +69,7 @@ class FieldDisplay extends JPanel {
                 drawTile(g, new Coordinate(c, r), imgTile);
 
         // Draw the units.
-        for (Unit unit : iface.getUnitList()) {
+        for (Unit unit : iface.getAllUnitList()) {
             // Draw that unit's images.
             drawTile(g, unit.getHead(), unit.imgHead);
             if (unit.isDone())
@@ -133,7 +133,7 @@ class FieldDisplay extends JPanel {
      */
     public Unit unitFromTile(Coordinate coord) {
         // Iterate through all the programs.
-        for (Unit u : iface.getUnitList())
+        for (Unit u : iface.getAllUnitList())
             for (Coordinate c: u.sectors)
                 if (coord.equals(c))
                     return u;
