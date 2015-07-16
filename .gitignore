@@ -2,3 +2,4 @@ spybot/
 hackbotcore/
 hackbotui/
 hackbotutil/
+*.jar
