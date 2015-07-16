@@ -22,9 +22,6 @@ class FieldDisplay extends JComponent {
     private GameInterface iface;
     private UI gameui;
 
-    /** The images to use for each unit. **/
-    private Map<Class, BufferedImage[]> unitImages;
-
     /** The edge length of a tile in pixels. **/
     public static final int TILE_PIX_SIZE = 32;
 
@@ -38,9 +35,6 @@ class FieldDisplay extends JComponent {
     private BufferedImage imgSelect;
     private BufferedImage imgTile;
     private BufferedImage imgUp;
-
-    // Fallback unit images
-    private BufferedImage[] unknownUnit;
 
     /** Class constructor. **/
     public FieldDisplay(GameInterface iface, UI gameui) {
@@ -65,26 +59,7 @@ class FieldDisplay extends JComponent {
         imgTile   = UI.getImage(     "tile.png");
         imgUp     = UI.getImage(       "up.png");
 
-        // Get unit images
-        unitImages = new HashMap<Class, BufferedImage[]>();
-        for (Unit u : iface.getUnitList())
-            if (!unitImages.containsKey(u.getClass()))
-                unitImages.put(u.getClass(), getUnitImages(u));
-        unknownUnit = getUnitImages("unknown");
-
         addMouseListener(new FieldMouseListener(iface));
-    }
-
-    /**
-     * Get a unit's image based on the unit's name fiel, assuming that all the
-     * properly named images are already in the correct resource folder.
-     */
-    public static BufferedImage[] getUnitImages(String filename) {
-         return new BufferedImage[] { UI.getImage(filename + ".png"),
-                                      UI.getImage(filename + "_body.png") };
-    }
-    public static BufferedImage[] getUnitImages(Unit unit) {
-        return getUnitImages(unit.getName().toLowerCase());
     }
 
     /** Display the current field data. **/
@@ -98,17 +73,12 @@ class FieldDisplay extends JComponent {
 
         // Draw the units.
         for (Unit unit : iface.getUnitList()) {
-            // Find that unit's images.
-            Image[] images = unitImages.get(unit.getClass());
-            if (images == null)
-                images = unknownUnit;
-
             // Draw that unit's images.
-            drawTile(g, unit.getHead(), images[0]);
+            drawTile(g, unit.getHead(), unit.imgHead);
             if (unit.isDone())
                 drawTile(g, unit.getHead(), imgDone);
             for (int i = 1; i < unit.sectors.size(); i++)
-                drawTile(g, unit.sectors.get(i), images[1]);
+                drawTile(g, unit.sectors.get(i), unit.imgBody);
         }
 
         // If there is a selection, draw the selection overlay.
