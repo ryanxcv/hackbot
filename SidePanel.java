@@ -53,7 +53,8 @@ public class SidePanel extends JPanel {
 
     private class InfoPane extends GameFrame {
 
-        private JLabel  name = new JLabel();
+        private ImagePanel img  = new ImagePanel();
+        private JLabel  name    = new JLabel();
         private JLabel  maxSize = new JLabel();
         private JLabel  size    = new JLabel();
         private JLabel  speed   = new JLabel();
@@ -69,6 +70,7 @@ public class SidePanel extends JPanel {
             northeast.setLayout(new BoxLayout(northeast, BoxLayout.Y_AXIS));
             northeast.add(Box.createVerticalGlue());
             north.add(northeast, BorderLayout.EAST);
+            north.add(img, BorderLayout.WEST);
             northeast.add(name);
             northeast.add(maxSize);
             northeast.add(size);
@@ -123,7 +125,8 @@ public class SidePanel extends JPanel {
 
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            g.drawImage(image, 0, 0, null);
+            if (image != null)
+                g.drawImage(image, 0, 0, null);
         }
     }
 }
