@@ -1,5 +1,12 @@
 package hackbotcore;
 
+// Image handling
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
 import java.util.concurrent.Callable;
 import java.util.LinkedList;
 
@@ -22,7 +29,9 @@ public abstract class Unit {
     protected int speed;
     protected int maxSize;
     protected Team team;
-    public Ability[] abilities;
+    public final Ability[] abilities;
+    public final BufferedImage imgHead;
+    public final BufferedImage imgBody;
 
     public static enum Team { PLAYER, COMPUTER;
         private static Team[] vals = values();
@@ -38,7 +47,15 @@ public abstract class Unit {
         sectors.add(coord);
         savedSectors.add(coord);
         this.sectors = sectors;
-        init(speed, TurnState.READY, name, speed, maxSize, team, abilities);
+        this.moves     = speed;
+        this.state     = TurnState.READY;
+        this.name      = name;
+        this.speed     = speed;
+        this.maxSize   = maxSize;
+        this.team      = team;
+        this.abilities = abilities;
+        imgHead = getImage(name.toLowerCase() + ".png");
+        imgBody = getImage(name.toLowerCase() + "_body.png");
     }
 
     /** General constructor for creating a Unit when all fields are known. **/
@@ -47,12 +64,6 @@ public abstract class Unit {
                 Ability[] abilities) {
         this.sectors = sectors;
         savedSectors = sectorsCopy();
-        init(moves, state, name, speed, maxSize, team, abilities);
-
-    }
-
-    private void init(int moves, TurnState state, String name, int speed,
-                      int maxSize, Team team, Ability[] abilities) {
         this.moves     = moves;
         this.state     = state;
         this.name      = name;
@@ -60,6 +71,8 @@ public abstract class Unit {
         this.maxSize   = maxSize;
         this.team      = team;
         this.abilities = abilities;
+        imgHead = getImage(name.toLowerCase() + ".png");
+        imgBody = getImage(name.toLowerCase() + "_body.png");
     }
 
     protected void setDone() { state = TurnState.DONE; }
@@ -183,6 +196,15 @@ public abstract class Unit {
         for (Coordinate coord : sectors)
             copy.add(coord);
         return copy;
+    }
+
+    protected static BufferedImage getImage(String filename) {
+        try {
+            return ImageIO.read(new File("img/" + filename));
+        } catch (IOException e) {
+            System.out.println("Warning: " + filename + " failed to load.");
+        }
+        return null;
     }
 
     public static class Hack extends Unit {
